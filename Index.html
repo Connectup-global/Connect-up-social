@@ -1,0 +1,420 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ConnectUp - Social App</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+    }
+
+    header {
+      padding: 20px;
+      background: #111c31;
+      border-bottom: 1px solid #29364c;
+      position: sticky;
+      top: 0;
+    }
+
+    header h1 {
+      margin: 0;
+      color: #38bdf8;
+      font-size: 26px;
+    }
+
+    header p {
+      margin: 6px 0 0;
+      color: #94a3b8;
+      font-size: 13px;
+    }
+
+    main {
+      max-width: 600px;
+      margin: auto;
+      padding: 16px;
+      padding-bottom: 90px;
+    }
+
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 16px;
+      border-radius: 16px;
+      margin-bottom: 16px;
+    }
+
+    h2 {
+      font-size: 18px;
+      margin-top: 0;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 13px;
+      margin-bottom: 10px;
+      border: 1px solid #475569;
+      border-radius: 10px;
+      background: #0f172a;
+      color: white;
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 11px 15px;
+      background: #38bdf8;
+      color: #082f49;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:active {
+      opacity: 0.75;
+    }
+
+    .post-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: #334155;
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+    }
+
+    .post-head strong {
+      display: block;
+    }
+
+    .muted {
+      color: #94a3b8;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .post-text {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      line-height: 1.5;
+    }
+
+    .post-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-top: 1px solid #334155;
+      padding-top: 12px;
+      margin-top: 12px;
+    }
+
+    .like-btn {
+      background: #334155;
+      color: white;
+    }
+
+    .liked {
+      background: #be123c;
+      color: white;
+    }
+
+    .empty {
+      color: #94a3b8;
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-around;
+      background: #111c31;
+      border-top: 1px solid #334155;
+      padding: 12px 4px;
+      padding-bottom: max(12px, env(safe-area-inset-bottom));
+    }
+
+    nav button {
+      background: transparent;
+      color: #cbd5e1;
+      padding: 8px;
+    }
+
+    nav button.active {
+      color: #38bdf8;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>ConnectUp 🌐</h1>
+    <p>Meet people. Share ideas. Stay connected.</p>
+  </header>
+
+  <main>
+    <section id="home">
+      <div class="card">
+        <h2>What's on your mind?</h2>
+        <textarea id="postInput"
+          maxlength="500"
+          placeholder="Share something with the community..."></textarea>
+        <button onclick="createPost()">Publish post</button>
+      </div>
+
+      <h2>Community Feed</h2>
+      <div id="feed"></div>
+    </section>
+
+    <section id="profile" class="hidden">
+      <div class="card">
+        <h2>My Profile 👤</h2>
+        <div class="avatar">😊</div>
+        <p>Welcome to your ConnectUp profile!</p>
+
+        <label for="username">Your display name</label>
+        <input id="username" maxlength="30"
+          placeholder="Enter your name">
+
+        <button onclick="saveProfile()">Save profile</button>
+        <p id="profileMessage" class="muted"></p>
+      </div>
+
+      <div class="card">
+        <h2>My activity</h2>
+        <p id="postCount">Your posts: 0</p>
+        <p id="likeCount">Likes received: 0</p>
+      </div>
+    </section>
+  </main>
+
+  <nav>
+    <button id="homeTab" class="active"
+      onclick="showPage('home')">🏠 Home</button>
+    <button onclick="showPage('profile')">👤 Profile</button>
+  </nav>
+
+  <script>
+    const starterPosts = [
+      {
+        id: 1,
+        name: "ConnectUp Team",
+        text: "Welcome to ConnectUp! 🎉 Share your first post and meet the community.",
+        likes: 2,
+        liked: false,
+        mine: false
+      },
+      {
+        id: 2,
+        name: "Alex",
+        text: "What is everyone learning or working on today? 🚀",
+        likes: 1,
+        liked: false,
+        mine: false
+      }
+    ];
+
+    let posts = starterPosts;
+    let username = "New Member";
+    let nextId = 3;
+
+    try {
+      const savedPosts = localStorage.getItem("connectupPosts");
+      const savedName = localStorage.getItem("connectupName");
+
+      if (savedPosts) posts = JSON.parse(savedPosts);
+      if (savedName) username = savedName;
+
+      nextId = Math.max(3, ...posts.map(p => p.id + 1));
+    } catch (error) {
+      console.log("Using temporary app data.");
+    }
+
+    function saveData() {
+      try {
+        localStorage.setItem("connectupPosts", JSON.stringify(posts));
+        localStorage.setItem("connectupName", username);
+      } catch (error) {
+        console.log("Could not save data on this browser.");
+      }
+    }
+
+    function safeText(text) {
+      return String(text).replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
+    }
+
+    function renderFeed() {
+      const feed = document.getElementById("feed");
+
+      if (posts.length === 0) {
+        feed.innerHTML =
+          '<div class="card empty">No posts yet. Be the first to share!</div>';
+        updateStats();
+        return;
+      }
+
+      feed.innerHTML = posts.map(post => `
+        <article class="card">
+          <div class="post-head">
+            <div class="avatar">😊</div>
+            <div>
+              <strong>${safeText(post.name)}</strong>
+              <div class="muted">ConnectUp member</div>
+            </div>
+          </div>
+
+          <div class="post-text">${safeText(post.text)}</div>
+
+          <div class="post-actions">
+            <button class="like-btn ${post.liked ? "liked" : ""}"
+              onclick="toggleLike(${post.id})">
+              ${post.liked ? "❤️ Liked" : "🤍 Like"}
+              · ${post.likes}
+            </button>
+
+            ${post.mine ? `
+              <button onclick="deletePost(${post.id})">
+                Delete
+              </button>` : ""}
+          </div>
+        </article>
+      `).join("");
+
+      updateStats();
+    }
+
+    function createPost() {
+      const input = document.getElementById("postInput");
+      const text = input.value.trim();
+
+      if (!text) {
+        alert("Please write something before publishing.");
+        return;
+      }
+
+      posts.unshift({
+        id: nextId++,
+        name: username,
+        text: text,
+        likes: 0,
+        liked: false,
+        mine: true
+      });
+
+      input.value = "";
+      saveData();
+      renderFeed();
+      showPage("home");
+    }
+
+    function toggleLike(id) {
+      const post = posts.find(p => p.id === id);
+      if (!post) return;
+
+      post.liked = !post.liked;
+      post.likes += post.liked ? 1 : -1;
+
+      saveData();
+      renderFeed();
+    }
+
+    function deletePost(id) {
+      const post = posts.find(p => p.id === id);
+      if (!post || !post.mine) return;
+
+      if (confirm("Delete this post?")) {
+        posts = posts.filter(p => p.id !== id);
+        saveData();
+        renderFeed();
+      }
+    }
+
+    function saveProfile() {
+      const input = document.getElementById("username");
+      const newName = input.value.trim();
+
+      if (!newName) {
+        alert("Please enter a display name.");
+        return;
+      }
+
+      username = newName;
+      saveData();
+
+      document.getElementById("profileMessage").textContent =
+        "Profile name saved!";
+
+      renderFeed();
+    }
+
+    function updateStats() {
+      const myPosts = posts.filter(p => p.mine);
+      const myLikes = myPosts.reduce((sum, p) => sum + p.likes, 0);
+
+      document.getElementById("postCount").textContent =
+        "Your posts: " + myPosts.length;
+
+      document.getElementById("likeCount").textContent =
+        "Likes received: " + myLikes;
+    }
+
+    function showPage(page) {
+      document.getElementById("home").classList.toggle(
+        "hidden", page !== "home"
+      );
+
+      document.getElementById("profile").classList.toggle(
+        "hidden", page !== "profile"
+      );
+
+      document.getElementById("homeTab").classList.toggle(
+        "active", page === "home"
+      );
+
+      if (page === "profile") {
+        document.getElementById("username").value = username;
+        updateStats();
+      }
+    }
+
+    renderFeed();
+  </script>
+</body>
+</html>
