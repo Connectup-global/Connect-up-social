@@ -2,107 +2,259 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-  
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#087f73">
 <title>ConnectUp — Community</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--teal:#087f73;--teal-dark:#06665e;--mint:#e6f7f4;--bg:#f4f8f8;--white:#fff;--text:#183331;--muted:#718582;--border:#e1ebea;--danger:#b42332;--shadow:0 5px 22px rgba(20,70,65,.06)}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;line-height:1.5}button,input,textarea{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #80d9ce;outline-offset:2px}
-.topbar{position:sticky;top:0;z-index:10;background:#ffffffed;border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}.topinner{max-width:1100px;margin:auto;padding:12px 18px;display:flex;align-items:center;gap:14px}.brand{font-size:23px;font-weight:800;color:var(--teal);white-space:nowrap}.brand span{color:var(--text)}.searchbox{flex:1;max-width:460px}.searchbox input,.field{width:100%;border:1px solid var(--border);border-radius:12px;padding:11px 13px;background:#f8fbfb;color:var(--text)}.top-actions{margin-left:auto;display:flex;gap:8px}
-.btn{border:0;border-radius:11px;padding:10px 14px;background:var(--teal);color:white;font-weight:700}.btn:hover{background:var(--teal-dark)}.btn.light{background:var(--mint);color:var(--teal)}.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--border)}.btn.danger{background:#fff0f0;color:var(--danger)}.iconbtn{position:relative;border:1px solid var(--border);background:white;color:var(--teal);border-radius:12px;padding:9px 12px}.dot{position:absolute;top:-5px;right:-4px;border-radius:20px;background:#e04c4c;color:white;font-size:11px;padding:1px 5px}
-.layout{max-width:1100px;margin:22px auto;padding:0 16px;display:grid;grid-template-columns:200px minmax(0,620px) 220px;gap:20px}.panel,.card{background:var(--white);border:1px solid var(--border);border-radius:17px;box-shadow:var(--shadow)}.sidebar{padding:12px;height:max-content;position:sticky;top:82px}.navitem{display:flex;align-items:center;gap:10px;width:100%;padding:12px;border:0;background:transparent;color:var(--text);border-radius:11px;text-align:left;font-weight:700;margin:2px 0}.navitem.active,.navitem:hover{background:var(--mint);color:var(--teal)}.sideprofile{padding:13px 10px 18px;border-bottom:1px solid var(--border);margin-bottom:8px}
-.avatar{width:43px;height:43px;flex-shrink:0;border-radius:50%;display:grid;place-items:center;background:#d6f1eb;color:var(--teal);font-weight:800;overflow:hidden}.avatar img{width:100%;height:100%;object-fit:cover}.small{font-size:12px;color:var(--muted)}.muted{color:var(--muted)}main{min-width:0}.hero{padding:23px;margin-bottom:17px;background:linear-gradient(125deg,#e2f8f3,#fff)}.hero h1{font-size:25px;line-height:1.2;margin:0 0 8px}.hero p{margin:0;color:#54706c}.card{padding:17px;margin-bottom:15px}.cardhead{display:flex;align-items:center;gap:11px}.grow{flex:1;min-width:0}.name{font-weight:800;overflow-wrap:anywhere}.composer textarea{display:block;width:100%;resize:vertical;min-height:82px;margin:14px 0 10px;border:1px solid var(--border);border-radius:13px;padding:12px;background:#fbfdfd;color:var(--text)}.composebar{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.photo-label{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border);padding:9px 12px;border-radius:10px;color:var(--teal);font-weight:700;cursor:pointer}.photo-label input{display:none}.preview{max-width:100%;max-height:260px;object-fit:contain;border-radius:12px;margin-top:10px}.filters{display:flex;gap:8px;margin:15px 0;flex-wrap:wrap}.chip{border:1px solid var(--border);border-radius:22px;background:white;padding:7px 13px;color:var(--muted)}.chip.active{background:var(--mint);border-color:#b9e7df;color:var(--teal);font-weight:700}.posttext{white-space:pre-wrap;overflow-wrap:anywhere;margin:15px 0}.postimage{display:block;width:100%;max-height:430px;object-fit:contain;border-radius:12px;background:#f4f8f8;margin:10px 0}.postactions{display:flex;gap:6px;flex-wrap:wrap;border-top:1px solid var(--border);padding-top:11px}.action{flex:1;min-width:72px;border:0;border-radius:9px;padding:9px 5px;background:transparent;color:var(--muted);font-weight:700}.action:hover,.action.liked{background:var(--mint);color:var(--teal)}.comments{margin-top:13px;border-top:1px solid var(--border);padding-top:12px}.comment{display:flex;gap:8px;margin:12px 0}.comment .avatar{width:31px;height:31px;font-size:12px}.commenttext{background:#f4f8f8;border-radius:12px;padding:9px 11px;min-width:0;overflow-wrap:anywhere}.commentform{display:flex;gap:7px;margin-top:10px}.commentform input{min-width:0;flex:1}.rightcol .card{padding:15px}.rightcol h3{font-size:15px;margin:0 0 10px}.member{display:flex;align-items:center;gap:9px;margin:12px 0}.member .btn{padding:7px 9px;font-size:12px}.notice{padding:12px;border-bottom:1px solid var(--border);overflow-wrap:anywhere}.notice:last-child{border-bottom:0}.empty{text-align:center;padding:28px 12px;color:var(--muted)}.profilehead{display:flex;gap:15px;align-items:center;flex-wrap:wrap}.profilehead .avatar{width:70px;height:70px;font-size:22px}.statrow{display:flex;gap:22px;margin:15px 0}.stat strong{display:block;color:var(--teal)}.hidden{display:none!important}footer{text-align:center;padding:20px;color:var(--muted);font-size:12px}.mobile-nav{display:none}
-@media(max-width:900px){.layout{grid-template-columns:175px minmax(0,1fr)}.rightcol{display:none}}
-@media(max-width:620px){.topinner{padding:10px 12px;gap:9px;flex-wrap:wrap}.brand{font-size:21px}.searchbox{order:3;flex-basis:100%;max-width:none}.top-actions{margin-left:auto}.top-actions .btn{padding:8px 10px}.layout{display:block;margin:13px auto;padding:0 10px}.sidebar{display:none}.hero{padding:19px}.hero h1{font-size:22px}.card{padding:13px;border-radius:14px}.mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:20;background:#fffffff5;border-top:1px solid var(--border);padding:7px 3px max(7px,env(safe-area-inset-bottom));justify-content:space-around}.mobile-nav button{border:0;background:transparent;color:var(--muted);padding:6px 9px;font-size:11px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:2px}.mobile-nav button.active{color:var(--teal)}body{padding-bottom:72px}.postactions{gap:2px}.action{font-size:12px;min-width:60px}}
+:root{--teal:#087f73;--dark:#06665e;--mint:#e6f7f4;--bg:#f4f8f8;--text:#183331;--muted:#718582;--border:#e1ebea;--danger:#b42332}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 Arial,Helvetica,sans-serif}
+button,input,textarea{font:inherit}button{cursor:pointer}.top{position:sticky;top:0;background:#ffffffed;border-bottom:1px solid var(--border);padding:12px 16px;z-index:5}
+.topin{max-width:900px;margin:auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-size:23px;font-weight:800;color:var(--teal)}.brand span{color:var(--text)}
+.grow{flex:1;min-width:0}.wrap{max-width:900px;margin:20px auto;padding:0 12px}.card{background:white;border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:0 4px 18px #1446410b}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.btn{border:0;border-radius:10px;padding:10px 14px;background:var(--teal);color:#fff;font-weight:700}.btn.secondary{background:var(--mint);color:var(--teal)}.btn.danger{background:#fff0f0;color:var(--danger)}
+.field,textarea{width:100%;border:1px solid var(--border);border-radius:10px;padding:11px;background:#fbfdfd;color:var(--text);margin:5px 0 12px}textarea{min-height:85px;resize:vertical}
+.muted,.small{color:var(--muted)}.small{font-size:12px}.hidden{display:none!important}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.tab{border:1px solid var(--border);border-radius:20px;padding:8px 13px;background:white;color:var(--muted)}.tab.active{background:var(--mint);color:var(--teal);font-weight:700}
+.posthead{display:flex;align-items:center;gap:10px}.avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#d6f1eb;color:var(--teal);font-weight:800;overflow:hidden;flex-shrink:0}.avatar img{width:100%;height:100%;object-fit:cover}
+.posttext{white-space:pre-wrap;overflow-wrap:anywhere;margin:14px 0}.media{width:100%;max-height:460px;object-fit:contain;border-radius:12px;background:#f5f8f8;margin:8px 0}.actions{display:flex;gap:8px;flex-wrap:wrap;border-top:1px solid var(--border);padding-top:10px}.action{border:0;background:transparent;color:var(--muted);padding:8px;font-weight:700}
+.comment{background:#f4f8f8;border-radius:10px;padding:9px;margin:7px 0;overflow-wrap:anywhere}.status{padding:10px 12px;border-radius:10px;background:var(--mint);color:var(--dark);margin:10px 0}.status.error{background:#fff0f0;color:var(--danger)}
+h1{font-size:25px;margin:0 0 6px}h2{font-size:20px;margin:0 0 10px}.foot{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+@media(max-width:600px){.wrap{margin:12px auto}.card{padding:13px}.topin .btn{padding:8px 10px}}
 </style>
 </head>
 <body>
-<header class="topbar"><div class="topinner">
-  <div class="brand">Connect<span>Up</span></div>
-  <div class="searchbox"><input id="search" type="search" placeholder="Search posts and people..." aria-label="Search posts and people"></div>
-  <div class="top-actions"><button class="iconbtn" onclick="showPage('notifications')" aria-label="Notifications">🔔<span id="noticeBadge" class="dot hidden">0</span></button><button class="btn light" onclick="showPage('profile')">My Profile</button></div>
-</div></header>
-<div class="layout">
-<aside class="sidebar panel">
-  <div class="sideprofile"><div class="cardhead"><div class="avatar" id="sideAvatar">P</div><div class="grow"><div class="name" id="sideName">Phantom</div><div class="small">ConnectUp member</div></div></div></div>
-  <button class="navitem active" data-page="home" onclick="showPage('home')">⌂ &nbsp; Home</button>
-  <button class="navitem" data-page="search" onclick="showPage('search')">⌕ &nbsp; Explore</button>
-  <button class="navitem" data-page="profile" onclick="showPage('profile')">♙ &nbsp; Profile</button>
-  <button class="navitem" data-page="notifications" onclick="showPage('notifications')">♧ &nbsp; Notifications</button>
-  <p class="small" style="padding:8px">Meet people. Share ideas. Stay connected.</p>
-</aside>
-<main>
-<section id="homePage">
-  <div class="hero panel"><h1>Meet people. Share ideas. Stay connected.</h1><p>Your community starts with a conversation.</p></div>
-  <section class="card composer">
-    <div class="cardhead"><div class="avatar" id="composerAvatar">P</div><div><div class="name" id="composerName">Phantom</div><div class="small">Share with the community</div></div></div>
-    <textarea id="postText" maxlength="2000" placeholder="What's on your mind?"></textarea>
-    <div id="photoPreview"></div>
-    <div class="composebar"><label class="photo-label">＋ Add photo<input id="photoInput" type="file" accept="image/*"></label><button class="btn" onclick="publishPost()">Publish post</button></div>
-    <p class="small">Photos are saved in this browser. Use small images to avoid filling browser storage.</p>
-  </section>
-  <div class="filters"><button class="chip active" id="allFilter" onclick="setFilter('all')">All posts</button><button class="chip" id="followingFilter" onclick="setFilter('following')">Following</button></div>
-  <div id="feed"></div>
-</section>
-<section id="searchPage" class="hidden"><div class="card"><h2>Explore ConnectUp</h2><p class="muted">Search posts and member names using the search bar above.</p><div id="searchResults"></div></div></section>
-<section id="profilePage" class="hidden">
-  <div class="card"><div class="profilehead"><div class="avatar" id="profileAvatar">P</div><div class="grow"><h2 id="profileName" style="margin:0">Phantom</h2><div class="muted" id="profileBio">ConnectUp member</div></div></div>
-    <div class="statrow"><div class="stat"><strong id="myPosts">0</strong><span class="small">Posts</span></div><div class="stat"><strong id="followingCount">0</strong><span class="small">Following</span></div><div class="stat"><strong id="followerCount">0</strong><span class="small">Followers here</span></div></div>
-    <h3>Edit your profile</h3><label class="small" for="editName">Display name</label><input class="field" id="editName" maxlength="40" placeholder="Your display name">
-    <label class="small" for="editBio">Bio</label><textarea class="field" id="editBio" maxlength="180" placeholder="Tell the community about yourself" style="margin-top:8px"></textarea>
-    <label class="photo-label" style="margin:10px 0">＋ Profile photo<input id="avatarInput" type="file" accept="image/*"></label><button class="btn" onclick="saveProfile()">Save profile</button>
-  </div><h3>Your posts</h3><div id="profileFeed"></div>
-</section>
-<section id="notificationsPage" class="hidden"><div class="card"><h2>Notifications</h2><p class="muted">Your activity on this device.</p><button class="btn light" onclick="clearNotifications()">Clear notifications</button><div id="notificationsList" style="margin-top:12px"></div></div></section>
-</main>
-<aside class="rightcol"><div class="card"><h3>People to discover</h3><div id="suggestions"></div></div><div class="card"><h3>About ConnectUp</h3><p class="small">A place to meet people, exchange ideas and build community.</p><p class="small">This demo stores activity only in this browser.</p></div></aside>
-</div>
-<nav class="mobile-nav"><button class="active" data-page="home" onclick="showPage('home')"><span>⌂</span>Home</button><button data-page="search" onclick="showPage('search')"><span>⌕</span>Explore</button><button data-page="profile" onclick="showPage('profile')"><span>♙</span>Profile</button><button data-page="notifications" onclick="showPage('notifications')"><span>♧</span>Alerts</button></nav>
-<footer>ConnectUp · Meet people. Share ideas. Stay connected.</footer>
+<header class="top"><div class="topin"><div class="brand">Connect<span>Up</span></div><div class="grow muted">Meet people. Share ideas. Stay connected.</div><button id="authButton" class="btn secondary" onclick="toggleAuth()">Sign in / Sign up</button><button id="signOutButton" class="btn danger hidden" onclick="signOut()">Sign out</button></div></header>
+<div class="wrap">
+<div id="message" class="status hidden" role="status"></div>
+<section id="authCard" class="card hidden"><h2>Join ConnectUp</h2><p class="muted">Create an account or sign in to publish and interact with posts.</p><label>Email</label><input id="email" class="field" type="email" autocomplete="email" placeholder="you@example.com"><label>Password</label><input id="password" class="field" type="password" autocomplete="current-password" minlength="6" placeholder="At least 6 characters"><label>Display name (for sign-up)</label><input id="displayName" class="field" maxlength="40" placeholder="Your name"><div class="row"><button class="btn" onclick="signUp()">Create account</button><button class="btn secondary" onclick="signIn()">Sign in</button></div><p class="small">If email confirmation is enabled in Supabase, check your email after signing up.</p></section>
+<section class="card"><h1>Community feed</h1><p class="muted">Posts shared here can be seen by other ConnectUp members.</p></section>
+<section id="composer" class="card"><h2>Create a post</h2><p id="signedOutHint" class="muted">Sign in to publish a post, comment, like, or follow members.</p><textarea id="postContent" maxlength="2000" placeholder="What's on your mind?" disabled></textarea><label class="small">Add a photo or video</label><input id="mediaFile" class="field" type="file" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm" disabled><div class="small">Supported: JPG, PNG, WEBP, GIF, MP4 and WEBM. Keep files under 50 MB.</div><button id="publishButton" class="btn" onclick="publishPost()" disabled>Publish post</button></section>
+<div class="tabs"><button class="tab active" id="allTab" onclick="loadFeed('all')">All posts</button><button class="tab" id="followingTab" onclick="loadFeed('following')">Following</button><button class="tab" onclick="loadMyPosts()">My posts</button><button class="tab" onclick="loadFeed('all')">Refresh</button></div>
+<div id="feed"><div class="card muted">Loading community posts…</div></div>
+<section id="profileCard" class="card hidden"><h2>My profile</h2><label>Display name</label><input id="profileDisplay" class="field" maxlength="40" placeholder="Your display name"><label>Username</label><input id="profileUsername" class="field" maxlength="30" placeholder="username"><label>Bio</label><textarea id="profileBio" maxlength="180" placeholder="Tell the community about yourself"></textarea><label>Profile photo</label><input id="avatarFile" class="field" type="file" accept="image/jpeg,image/png,image/webp,image/gif"><button class="btn" onclick="saveProfile()">Save profile</button></section>
+</div><footer class="foot">ConnectUp · Meet people. Share ideas. Stay connected.</footer>
 <script>
-const STORE="connectup_modern_v1";
-const DEFAULT_POSTS=[
-{id:"welcome-team",author:"ConnectUp Team",text:"Welcome to ConnectUp! 🎉 Share your first post and meet the community.",likes:2,liked:false,comments:[],photo:"",time:Date.now()-300000},
-{id:"welcome-alex",author:"Alex",text:"What is everyone learning or working on today? 🚀",likes:1,liked:false,comments:[],photo:"",time:Date.now()-200000}
-];
-let data=null;
-try{data=JSON.parse(localStorage.getItem(STORE));}catch(e){}
-if(!data||!Array.isArray(data.posts)){data={me:{name:"Phantom",bio:"Hello! I'm new to ConnectUp.",avatar:""},posts:DEFAULT_POSTS,following:[],notifications:[],readCount:0};}
-data.me=data.me||{name:"Phantom",bio:"",avatar:""};data.posts=data.posts||[];data.following=data.following||[];data.notifications=data.notifications||[];data.readCount=data.readCount||0;
-let activeFilter="all",pendingPhoto="";
-function save(){try{localStorage.setItem(STORE,JSON.stringify(data));}catch(e){alert("Browser storage is full. Try a smaller photo or remove old posts.");}}
-function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-function initial(n){return (n||"?").trim().slice(0,1).toUpperCase()||"?";}
-function avatar(n,photo="",cls="avatar"){return `<div class="${cls}">${photo?`<img src="${photo}" alt="">`:esc(initial(n))}</div>`;}
-function me(){return data.me.name||"Phantom";}
-function ago(t){let m=Math.max(0,Math.floor((Date.now()-(t||Date.now()))/60000));return m<1?"just now":m<60?m+"m ago":m<1440?Math.floor(m/60)+"h ago":Math.floor(m/1440)+"d ago";}
-function notify(message){data.notifications.unshift({id:Date.now()+Math.random(),message,time:Date.now()});data.notifications=data.notifications.slice(0,80);save();renderNotifications();badge();}
-function badge(){let n=Math.max(0,data.notifications.length-data.readCount),b=document.getElementById("noticeBadge");b.textContent=n>99?"99+":String(n);b.classList.toggle("hidden",n<=0);}
-function setFilter(f){activeFilter=f;document.getElementById("allFilter").classList.toggle("active",f==="all");document.getElementById("followingFilter").classList.toggle("active",f==="following");renderFeed();}
-function showPage(page){["home","search","profile","notifications"].forEach(p=>document.getElementById(p+"Page").classList.toggle("hidden",p!==page));document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===page));if(page==="notifications"){data.readCount=data.notifications.length;save();badge();}if(page==="profile"){document.getElementById("editName").value=me();document.getElementById("editBio").value=data.me.bio||"";}renderAll();window.scrollTo({top:0,behavior:"smooth"});}
-function publishPost(){let input=document.getElementById("postText"),text=input.value.trim();if(!text&&!pendingPhoto){alert("Write something or add a photo first.");return;}data.posts.unshift({id:"p"+Date.now()+Math.random().toString(16).slice(2),author:me(),text,photo:pendingPhoto,likes:0,liked:false,mine:true,comments:[],time:Date.now()});input.value="";pendingPhoto="";document.getElementById("photoPreview").innerHTML="";document.getElementById("photoInput").value="";save();renderAll();showPage("home");}
-function postById(id){return data.posts.find(p=>String(p.id)===String(id));}
-function toggleLike(id){let p=postById(id);if(!p)return;p.liked=!p.liked;p.likes=Math.max(0,(p.likes||0)+(p.liked?1:-1));if(p.liked&&p.author!==me())notify("You liked "+p.author+"'s post.");save();renderAll();}
-function deletePost(id){let p=postById(id);if(!p||!(p.mine||p.author===me())){alert("You can delete only your own posts.");return;}if(confirm("Delete this post?")){data.posts=data.posts.filter(x=>String(x.id)!==String(id));save();renderAll();}}
-function addComment(id){let input=document.getElementById("comment-"+id),text=input?input.value.trim():"";if(!text)return;let p=postById(id);if(!p)return;p.comments=p.comments||[];p.comments.push({author:me(),text,time:Date.now()});if(p.author!==me())notify("You commented on "+p.author+"'s post.");save();renderAll();}
-function follow(name){if(!name||name===me())return;let i=data.following.indexOf(name);if(i>=0)data.following.splice(i,1);else{data.following.push(name);notify("You followed "+name+".");}save();renderAll();}
-function saveProfile(){let n=document.getElementById("editName").value.trim();if(!n){alert("Please enter a display name.");return;}let old=me();data.me.name=n;data.me.bio=document.getElementById("editBio").value.trim();data.posts.forEach(p=>{if(p.author===old&&(p.mine||old==="Phantom"||old==="New Member"))p.author=n;});save();renderAll();alert("Profile saved on this device.");}
-function clearNotifications(){if(!confirm("Clear your activity notifications?"))return;data.notifications=[];data.readCount=0;save();renderNotifications();badge();}
-function postCard(p){let own=!!p.mine||p.author===me(),comments=p.comments||[];return `<article class="card"><div class="cardhead">${avatar(p.author,own?data.me.avatar:"")}<div class="grow"><div class="name">${esc(p.author)}</div><div class="small">${ago(p.time)}</div></div>${!own?`<button class="btn light" onclick="follow('${esc(p.author).replace(/'/g,"&#39;")}')">${data.following.includes(p.author)?"Following":"＋ Follow"}</button>`:`<button class="btn danger" onclick="deletePost('${String(p.id).replace(/'/g,"")}')">Delete</button>`}</div>${p.text?`<div class="posttext">${esc(p.text)}</div>`:""}${p.photo?`<img class="postimage" src="${p.photo}" alt="Photo shared in a post">`:""}<div class="postactions"><button class="action ${p.liked?"liked":""}" onclick="toggleLike('${String(p.id).replace(/'/g,"")}')">${p.liked?"♥ Liked":"♡ Like"} · ${p.likes||0}</button><button class="action" onclick="document.getElementById('comments-${esc(String(p.id))}').classList.toggle('hidden')">💬 Comments · ${comments.length}</button></div><div class="comments hidden" id="comments-${esc(String(p.id))}">${comments.map(c=>`<div class="comment">${avatar(c.author)}<div class="commenttext"><strong>${esc(c.author)}</strong><div>${esc(c.text)}</div><div class="small">${ago(c.time)}</div></div></div>`).join("")}<div class="commentform"><input class="field" id="comment-${esc(String(p.id))}" maxlength="500" placeholder="Write a comment..."><button class="btn" onclick="addComment('${String(p.id).replace(/'/g,"")}')">Send</button></div></div></article>`;}
-function renderFeed(){let feed=document.getElementById("feed"),list=data.posts;if(activeFilter==="following")list=list.filter(p=>data.following.includes(p.author)||p.author===me());if(!list.length){feed.innerHTML='<div class="card empty">No posts here yet. Be the first to share!</div>';return;}feed.innerHTML=list.map(postCard).join("");}
-function renderProfileFeed(){let list=data.posts.filter(p=>p.author===me()&&(p.mine||p.author===me()));document.getElementById("profileFeed").innerHTML=list.length?list.map(postCard).join(""):'<div class="card empty">Your posts will appear here.</div>';}
-function renderSuggestions(){let names=[...new Set(data.posts.map(p=>p.author).filter(n=>n!==me()))].slice(0,8);document.getElementById("suggestions").innerHTML=names.length?names.map(n=>`<div class="member">${avatar(n)}<div class="grow"><strong>${esc(n)}</strong><div class="small">Member</div></div><button class="btn light" onclick="follow('${esc(n).replace(/'/g,"&#39;")}')">${data.following.includes(n)?"Following":"Follow"}</button></div>`).join(""):'<p class="small">More members will appear here as posts are added.</p>'; }
-function renderNotifications(){let el=document.getElementById("notificationsList");el.innerHTML=data.notifications.length?data.notifications.map(n=>`<div class="notice"><div>${esc(n.message)}</div><div class="small">${ago(n.time)}</div></div>`).join(""):'<div class="empty">No notifications yet.</div>';}
-function renderSearch(){let q=document.getElementById("search").value.trim().toLowerCase(),el=document.getElementById("searchResults");if(!q){el.innerHTML='<div class="empty">Type a name or keyword in the search bar above.</div>';return;}let matches=data.posts.filter(p=>(p.author+" "+p.text).toLowerCase().includes(q));el.innerHTML=matches.length?matches.map(postCard).join(""):'<div class="empty">No matching posts found.</div>';}
-function renderAll(){document.getElementById("sideName").textContent=me();document.getElementById("sideAvatar").innerHTML=data.me.avatar?`<img src="${data.me.avatar}" alt="">`:esc(initial(me()));document.getElementById("composerName").textContent=me();document.getElementById("composerAvatar").innerHTML=data.me.avatar?`<img src="${data.me.avatar}" alt="">`:esc(initial(me()));document.getElementById("profileName").textContent=me();document.getElementById("profileBio").textContent=data.me.bio||"ConnectUp member";document.getElementById("profileAvatar").innerHTML=data.me.avatar?`<img src="${data.me.avatar}" alt="">`:esc(initial(me()));document.getElementById("myPosts").textContent=data.posts.filter(p=>p.author===me()&&(p.mine||p.author===me())).length;document.getElementById("followingCount").textContent=data.following.length;document.getElementById("followerCount").textContent="—";renderFeed();renderProfileFeed();renderSuggestions();renderNotifications();renderSearch();badge();}
-function readImage(file,callback){if(!file)return;if(!file.type.startsWith("image/")){alert("Please choose an image file.");return;}if(file.size>1200000){alert("Please choose an image under 1.2 MB so browser storage does not fill up.");return;}let reader=new FileReader();reader.onload=()=>callback(reader.result);reader.readAsDataURL(file);}
-document.getElementById("photoInput").addEventListener("change",e=>readImage(e.target.files[0],src=>{pendingPhoto=src;document.getElementById("photoPreview").innerHTML=`<img class="preview" src="${src}" alt="Photo preview"><button class="btn ghost" onclick="pendingPhoto='';document.getElementById('photoPreview').innerHTML='';document.getElementById('photoInput').value=''">Remove photo</button>`;}));
-document.getElementById("avatarInput").addEventListener("change",e=>readImage(e.target.files[0],src=>{data.me.avatar=src;save();renderAll();}));
-document.getElementById("search").addEventListener("input",()=>{if(!document.getElementById("searchPage").classList.contains("hidden"))renderSearch();else if(document.getElementById("search").value.trim())showPage("search");});
-renderAll();
+/* Supabase connection: this publishable key is intended for use in browser code.
+   Never put a Supabase secret/service-role key in this file. */
+const SUPABASE_URL = 'https://npfbdvbkjndueayeofxo.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_H1Djrliot9m4X1341tDbBw_BQhRQMTx';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+let currentUser = null;
+let profileCache = {};
+let feedMode = 'all';
+const el = id => document.getElementById(id);
+
+function message(text, error=false) {
+  el('message').textContent = text;
+  el('message').classList.remove('hidden','error');
+  if (error) el('message').classList.add('error');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function clearMessage(){ el('message').classList.add('hidden'); }
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function initials(s){return (s||'?').trim().slice(0,1).toUpperCase()||'?';}
+function avatar(name,url){return `<div class="avatar">${url?`<img src="${escapeHtml(url)}" alt="">`:escapeHtml(initials(name))}</div>`;}
+function when(t){
+  if(!t)return '';
+  const mins=Math.max(0,Math.floor((Date.now()-new Date(t).getTime())/60000));
+  return mins<1?'just now':mins<60?mins+'m ago':mins<1440?Math.floor(mins/60)+'h ago':Math.floor(mins/1440)+'d ago';
+}
+function toggleAuth(){el('authCard').classList.toggle('hidden');}
+
+async function signUp(){
+  clearMessage();
+  const email=el('email').value.trim(), password=el('password').value;
+  const display=el('displayName').value.trim()||email.split('@')[0];
+  if(!email||password.length<6){message('Enter a valid email and a password of at least 6 characters.',true);return;}
+  const {data,error}=await sb.auth.signUp({email,password,options:{data:{display_name:display}}});
+  if(error){message(error.message,true);return;}
+  if(data.user){
+    if(data.session){
+      currentUser=data.user; await ensureProfile(display); await updateAuthUI();
+      message('Account created! You are signed in.'); await loadFeed('all');
+    } else message('Account created. Check your email to confirm it, then sign in.');
+  }
+}
+async function signIn(){
+  clearMessage();
+  const email=el('email').value.trim(),password=el('password').value;
+  if(!email||!password){message('Enter your email and password.',true);return;}
+  const {data,error}=await sb.auth.signInWithPassword({email,password});
+  if(error){message(error.message,true);return;}
+  currentUser=data.user; await ensureProfile(el('displayName').value.trim()); await updateAuthUI();
+  el('authCard').classList.add('hidden'); message('You are signed in.'); await loadFeed('all');
+}
+async function signOut(){
+  const {error}=await sb.auth.signOut();
+  if(error){message(error.message,true);return;}
+  currentUser=null; await updateAuthUI(); message('You have signed out.'); await loadFeed('all');
+}
+async function ensureProfile(display=''){
+  if(!currentUser)return;
+  const {data,error}=await sb.from('profiles').select('*').eq('id',currentUser.id).maybeSingle();
+  if(error){console.error(error);return;}
+  if(!data){
+    const base=(display||currentUser.user_metadata?.display_name||currentUser.email?.split('@')[0]||'member').toLowerCase().replace(/[^a-z0-9_]/g,'').slice(0,25)||'member';
+    const {error:insertError}=await sb.from('profiles').insert({id:currentUser.id,username:base+'_'+currentUser.id.slice(0,5),display_name:display||currentUser.user_metadata?.display_name||base,bio:''});
+    if(insertError)console.error(insertError);
+  }
+}
+async function updateAuthUI(){
+  const {data}=await sb.auth.getSession();
+  currentUser=data.session?.user||null;
+  el('authButton').classList.toggle('hidden',!!currentUser);
+  el('signOutButton').classList.toggle('hidden',!currentUser);
+  ['postContent','mediaFile','publishButton'].forEach(id=>el(id).disabled=!currentUser);
+  el('signedOutHint').classList.toggle('hidden',!!currentUser);
+  el('profileCard').classList.toggle('hidden',!currentUser);
+  if(currentUser){
+    const {data:p}=await sb.from('profiles').select('*').eq('id',currentUser.id).maybeSingle();
+    if(p){el('profileDisplay').value=p.display_name||'';el('profileUsername').value=p.username||'';el('profileBio').value=p.bio||'';}
+  }
+}
+async function saveProfile(){
+  if(!currentUser){message('Sign in first.',true);return;}
+  clearMessage();
+  const display=el('profileDisplay').value.trim();
+  const username=el('profileUsername').value.trim().toLowerCase().replace(/[^a-z0-9_]/g,'').slice(0,30);
+  const bio=el('profileBio').value.trim();
+  if(!display||!username){message('Please enter a display name and username.',true);return;}
+  let avatarUrl;
+  const file=el('avatarFile').files[0];
+  if(file){
+    if(!['image/jpeg','image/png','image/webp','image/gif'].includes(file.type)){message('Choose a JPG, PNG, WEBP, or GIF image for your profile photo.',true);return;}
+    const path=`${currentUser.id}/avatar-${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`;
+    const {error:upErr}=await sb.storage.from('Connectup-media').upload(path,file,{upsert:true,contentType:file.type});
+    if(upErr){message('Photo upload failed: '+upErr.message,true);return;}
+    avatarUrl=sb.storage.from('Connectup-media').getPublicUrl(path).data.publicUrl;
+  }
+  const update={id:currentUser.id,display_name:display,username,bio};
+  if(avatarUrl)update.avatar_url=avatarUrl;
+  const {error}=await sb.from('profiles').upsert(update,{onConflict:'id'});
+  if(error){message('Could not save profile: '+error.message,true);return;}
+  profileCache[currentUser.id]=update; message('Profile saved.'); await loadFeed(feedMode);
+}
+async function publishPost(){
+  if(!currentUser){message('Sign in to publish.',true);return;}
+  clearMessage();
+  const content=el('postContent').value.trim(),file=el('mediaFile').files[0];
+  if(!content&&!file){message('Write something or choose a photo/video first.',true);return;}
+  let mediaUrl=null,mediaType=null;
+  if(file){
+    if(file.size>50*1024*1024){message('Choose a file smaller than 50 MB.',true);return;}
+    if(!['image/jpeg','image/png','image/webp','image/gif','video/mp4','video/webm'].includes(file.type)){message('Please choose JPG, PNG, WEBP, GIF, MP4, or WEBM.',true);return;}
+    const path=`${currentUser.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`;
+    const {error:uploadError}=await sb.storage.from('Connectup-media').upload(path,file,{contentType:file.type,upsert:false});
+    if(uploadError){message('Media upload failed: '+uploadError.message,true);return;}
+    mediaUrl=sb.storage.from('Connectup-media').getPublicUrl(path).data.publicUrl;
+    mediaType=file.type.startsWith('video/')?'video':'image';
+  }
+  const {error}=await sb.from('posts').insert({user_id:currentUser.id,content,media_url:mediaUrl,media_type:mediaType});
+  if(error){message('Could not publish: '+error.message,true);return;}
+  el('postContent').value='';el('mediaFile').value='';message('Your post is published!');await loadFeed('all');
+}
+async function getProfiles(ids){
+  const missing=[...new Set(ids.filter(id=>id&&!profileCache[id]))];
+  if(missing.length){
+    const {data,error}=await sb.from('profiles').select('id,username,display_name,bio,avatar_url').in('id',missing);
+    if(!error)(data||[]).forEach(p=>profileCache[p.id]=p);
+  }
+  return profileCache;
+}
+async function loadFeed(mode='all'){
+  feedMode=mode;
+  el('allTab').classList.toggle('active',mode==='all');
+  el('followingTab').classList.toggle('active',mode==='following');
+  el('feed').innerHTML='<div class="card muted">Loading posts…</div>';
+  let query=sb.from('posts').select('id,user_id,content,media_url,media_type,created_at').order('created_at',{ascending:false}).limit(100);
+  if(mode==='mine'){
+    if(!currentUser){message('Sign in to see your posts.',true);el('feed').innerHTML='<div class="card muted">Sign in to see your posts.</div>';return;}
+    query=query.eq('user_id',currentUser.id);
+  }
+  const {data:posts,error}=await query;
+  if(error){el('feed').innerHTML=`<div class="card">Could not load posts: ${escapeHtml(error.message)}</div>`;return;}
+  let list=posts||[];
+  await getProfiles(list.map(p=>p.user_id));
+  if(mode==='following'){
+    if(!currentUser){el('feed').innerHTML='<div class="card muted">Sign in to see posts from members you follow.</div>';return;}
+    const {data:follows,error:fErr}=await sb.from('follows').select('following_id').eq('follower_id',currentUser.id);
+    if(fErr){message('Could not load followed members: '+fErr.message,true);return;}
+    const ids=(follows||[]).map(x=>x.following_id);
+    list=list.filter(p=>ids.includes(p.user_id)||p.user_id===currentUser.id);
+  }
+  if(!list.length){el('feed').innerHTML='<div class="card muted">No posts to show yet. Sign in and share the first post!</div>';return;}
+  const postIds=list.map(p=>p.id);
+  let likes=[],comments=[];
+  if(postIds.length){
+    const l=await sb.from('likes').select('post_id,user_id').in('post_id',postIds);likes=l.data||[];
+    const c=await sb.from('comments').select('id,post_id,user_id,content,created_at').in('post_id',postIds).order('created_at',{ascending:true});comments=c.data||[];
+    await getProfiles(comments.map(c=>c.user_id));
+  }
+  el('feed').innerHTML=list.map(p=>{
+    const prof=profileCache[p.user_id]||{},name=prof.display_name||prof.username||'ConnectUp member';
+    const postLikes=likes.filter(l=>l.post_id===p.id),myLike=!!currentUser&&postLikes.some(l=>l.user_id===currentUser.id);
+    const postComments=comments.filter(c=>c.post_id===p.id);
+    const media=p.media_url?(p.media_type==='video'?`<video class="media" controls preload="metadata" src="${escapeHtml(p.media_url)}"></video>`:`<img class="media" loading="lazy" src="${escapeHtml(p.media_url)}" alt="Post media">`):'';
+    return `<article class="card"><div class="posthead">${avatar(name,prof.avatar_url)}<div class="grow"><strong>${escapeHtml(name)}</strong><div class="small">@${escapeHtml(prof.username||'member')} · ${when(p.created_at)}</div></div>${currentUser&&p.user_id!==currentUser.id?`<button class="btn secondary" onclick="toggleFollow('${p.user_id}')">Follow / Unfollow</button>`:''}${currentUser&&p.user_id===currentUser.id?`<button class="btn danger" onclick="deletePost('${p.id}')">Delete</button>`:''}</div>${p.content?`<div class="posttext">${escapeHtml(p.content)}</div>`:''}${media}<div class="actions"><button class="action" onclick="toggleLike('${p.id}',${myLike})">${myLike?'♥ Liked':'♡ Like'} · ${postLikes.length}</button><span class="action">💬 Comments · ${postComments.length}</span></div><div>${postComments.map(c=>{const cp=profileCache[c.user_id]||{};return `<div class="comment"><strong>${escapeHtml(cp.display_name||cp.username||'Member')}:</strong> ${escapeHtml(c.content)} <span class="small">${when(c.created_at)}</span></div>`}).join('')}</div>${currentUser?`<div class="row"><input class="field grow" id="comment-${p.id}" maxlength="500" placeholder="Write a comment…" style="margin:8px 0"><button class="btn" onclick="addComment('${p.id}')">Send</button></div>`:''}</article>`;
+  }).join('');
+}
+async function toggleLike(postId,liked){
+  if(!currentUser){message('Sign in to like posts.',true);return;}
+  if(liked){
+    const {error}=await sb.from('likes').delete().eq('post_id',postId).eq('user_id',currentUser.id);
+    if(error)message(error.message,true);
+  }else{
+    const {error}=await sb.from('likes').insert({post_id:postId,user_id:currentUser.id});
+    if(error)message(error.message,true);
+  }
+  await loadFeed(feedMode);
+}
+async function addComment(postId){
+  if(!currentUser){message('Sign in to comment.',true);return;}
+  const input=el('comment-'+postId),content=input.value.trim();if(!content)return;
+  const {error}=await sb.from('comments').insert({post_id:postId,user_id:currentUser.id,content});
+  if(error){message('Could not add comment: '+error.message,true);return;}
+  await loadFeed(feedMode);
+}
+async function toggleFollow(followingId){
+  if(!currentUser){message('Sign in to follow members.',true);return;}
+  if(followingId===currentUser.id)return;
+  const {data:existing,error:readErr}=await sb.from('follows').select('follower_id').eq('follower_id',currentUser.id).eq('following_id',followingId).maybeSingle();
+  if(readErr){message(readErr.message,true);return;}
+  const result=existing
+    ?await sb.from('follows').delete().eq('follower_id',currentUser.id).eq('following_id',followingId)
+    :await sb.from('follows').insert({follower_id:currentUser.id,following_id:followingId});
+  if(result.error)message(result.error.message,true);
+  await loadFeed(feedMode);
+}
+async function deletePost(id){
+  if(!currentUser||!confirm('Delete this post?'))return;
+  const {error}=await sb.from('posts').delete().eq('id',id).eq('user_id',currentUser.id);
+  if(error){message('Could not delete post: '+error.message,true);return;}
+  message('Post deleted.');await loadFeed(feedMode);
+}
+async function loadMyPosts(){await loadFeed('mine');}
+
+(async function init(){
+  try {
+    const {data,error}=await sb.auth.getSession();
+    if(error)throw error;
+    currentUser=data.session?.user||null;
+    await updateAuthUI();
+    await loadFeed('all');
+    sb.auth.onAuthStateChange(async()=>{
+      await updateAuthUI();
+      await loadFeed('all');
+    });
+  } catch(err) {
+    console.error(err);
+    message('ConnectUp could not connect to Supabase. Check your project URL, publishable key, and internet connection.',true);
+    el('feed').innerHTML='<div class="card">Could not connect to Supabase. Please check your connection settings.</div>';
+  }
+})();
 </script>
 </body>
 </html>
