@@ -1,420 +1,105 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ConnectUp - Social App</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: #f8fafc;
-    }
-
-    header {
-      padding: 20px;
-      background: #111c31;
-      border-bottom: 1px solid #29364c;
-      position: sticky;
-      top: 0;
-    }
-
-    header h1 {
-      margin: 0;
-      color: #38bdf8;
-      font-size: 26px;
-    }
-
-    header p {
-      margin: 6px 0 0;
-      color: #94a3b8;
-      font-size: 13px;
-    }
-
-    main {
-      max-width: 600px;
-      margin: auto;
-      padding: 16px;
-      padding-bottom: 90px;
-    }
-
-    .card {
-      background: #1e293b;
-      border: 1px solid #334155;
-      padding: 16px;
-      border-radius: 16px;
-      margin-bottom: 16px;
-    }
-
-    h2 {
-      font-size: 18px;
-      margin-top: 0;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 13px;
-      margin-bottom: 10px;
-      border: 1px solid #475569;
-      border-radius: 10px;
-      background: #0f172a;
-      color: white;
-      font: inherit;
-    }
-
-    textarea {
-      min-height: 90px;
-      resize: vertical;
-    }
-
-    button {
-      border: none;
-      border-radius: 10px;
-      padding: 11px 15px;
-      background: #38bdf8;
-      color: #082f49;
-      font-size: 14px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    button:active {
-      opacity: 0.75;
-    }
-
-    .post-head {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-
-    .avatar {
-      width: 42px;
-      height: 42px;
-      flex-shrink: 0;
-      border-radius: 50%;
-      background: #334155;
-      display: grid;
-      place-items: center;
-      font-size: 22px;
-    }
-
-    .post-head strong {
-      display: block;
-    }
-
-    .muted {
-      color: #94a3b8;
-      font-size: 12px;
-      margin-top: 4px;
-    }
-
-    .post-text {
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-      line-height: 1.5;
-    }
-
-    .post-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      border-top: 1px solid #334155;
-      padding-top: 12px;
-      margin-top: 12px;
-    }
-
-    .like-btn {
-      background: #334155;
-      color: white;
-    }
-
-    .liked {
-      background: #be123c;
-      color: white;
-    }
-
-    .empty {
-      color: #94a3b8;
-      text-align: center;
-      padding: 20px 0;
-    }
-
-    nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      display: flex;
-      justify-content: space-around;
-      background: #111c31;
-      border-top: 1px solid #334155;
-      padding: 12px 4px;
-      padding-bottom: max(12px, env(safe-area-inset-bottom));
-    }
-
-    nav button {
-      background: transparent;
-      color: #cbd5e1;
-      padding: 8px;
-    }
-
-    nav button.active {
-      color: #38bdf8;
-    }
-
-    .hidden {
-      display: none;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#087f73">
+<title>ConnectUp — Community</title>
+<style>
+:root{--teal:#087f73;--teal-dark:#06665e;--mint:#e6f7f4;--bg:#f4f8f8;--white:#fff;--text:#183331;--muted:#718582;--border:#e1ebea;--danger:#b42332;--shadow:0 5px 22px rgba(20,70,65,.06)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;line-height:1.5}button,input,textarea{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #80d9ce;outline-offset:2px}
+.topbar{position:sticky;top:0;z-index:10;background:#ffffffed;border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}.topinner{max-width:1100px;margin:auto;padding:12px 18px;display:flex;align-items:center;gap:14px}.brand{font-size:23px;font-weight:800;color:var(--teal);white-space:nowrap}.brand span{color:var(--text)}.searchbox{flex:1;max-width:460px}.searchbox input,.field{width:100%;border:1px solid var(--border);border-radius:12px;padding:11px 13px;background:#f8fbfb;color:var(--text)}.top-actions{margin-left:auto;display:flex;gap:8px}
+.btn{border:0;border-radius:11px;padding:10px 14px;background:var(--teal);color:white;font-weight:700}.btn:hover{background:var(--teal-dark)}.btn.light{background:var(--mint);color:var(--teal)}.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--border)}.btn.danger{background:#fff0f0;color:var(--danger)}.iconbtn{position:relative;border:1px solid var(--border);background:white;color:var(--teal);border-radius:12px;padding:9px 12px}.dot{position:absolute;top:-5px;right:-4px;border-radius:20px;background:#e04c4c;color:white;font-size:11px;padding:1px 5px}
+.layout{max-width:1100px;margin:22px auto;padding:0 16px;display:grid;grid-template-columns:200px minmax(0,620px) 220px;gap:20px}.panel,.card{background:var(--white);border:1px solid var(--border);border-radius:17px;box-shadow:var(--shadow)}.sidebar{padding:12px;height:max-content;position:sticky;top:82px}.navitem{display:flex;align-items:center;gap:10px;width:100%;padding:12px;border:0;background:transparent;color:var(--text);border-radius:11px;text-align:left;font-weight:700;margin:2px 0}.navitem.active,.navitem:hover{background:var(--mint);color:var(--teal)}.sideprofile{padding:13px 10px 18px;border-bottom:1px solid var(--border);margin-bottom:8px}
+.avatar{width:43px;height:43px;flex-shrink:0;border-radius:50%;display:grid;place-items:center;background:#d6f1eb;color:var(--teal);font-weight:800;overflow:hidden}.avatar img{width:100%;height:100%;object-fit:cover}.small{font-size:12px;color:var(--muted)}.muted{color:var(--muted)}main{min-width:0}.hero{padding:23px;margin-bottom:17px;background:linear-gradient(125deg,#e2f8f3,#fff)}.hero h1{font-size:25px;line-height:1.2;margin:0 0 8px}.hero p{margin:0;color:#54706c}.card{padding:17px;margin-bottom:15px}.cardhead{display:flex;align-items:center;gap:11px}.grow{flex:1;min-width:0}.name{font-weight:800;overflow-wrap:anywhere}.composer textarea{display:block;width:100%;resize:vertical;min-height:82px;margin:14px 0 10px;border:1px solid var(--border);border-radius:13px;padding:12px;background:#fbfdfd;color:var(--text)}.composebar{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.photo-label{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border);padding:9px 12px;border-radius:10px;color:var(--teal);font-weight:700;cursor:pointer}.photo-label input{display:none}.preview{max-width:100%;max-height:260px;object-fit:contain;border-radius:12px;margin-top:10px}.filters{display:flex;gap:8px;margin:15px 0;flex-wrap:wrap}.chip{border:1px solid var(--border);border-radius:22px;background:white;padding:7px 13px;color:var(--muted)}.chip.active{background:var(--mint);border-color:#b9e7df;color:var(--teal);font-weight:700}.posttext{white-space:pre-wrap;overflow-wrap:anywhere;margin:15px 0}.postimage{display:block;width:100%;max-height:430px;object-fit:contain;border-radius:12px;background:#f4f8f8;margin:10px 0}.postactions{display:flex;gap:6px;flex-wrap:wrap;border-top:1px solid var(--border);padding-top:11px}.action{flex:1;min-width:72px;border:0;border-radius:9px;padding:9px 5px;background:transparent;color:var(--muted);font-weight:700}.action:hover,.action.liked{background:var(--mint);color:var(--teal)}.comments{margin-top:13px;border-top:1px solid var(--border);padding-top:12px}.comment{display:flex;gap:8px;margin:12px 0}.comment .avatar{width:31px;height:31px;font-size:12px}.commenttext{background:#f4f8f8;border-radius:12px;padding:9px 11px;min-width:0;overflow-wrap:anywhere}.commentform{display:flex;gap:7px;margin-top:10px}.commentform input{min-width:0;flex:1}.rightcol .card{padding:15px}.rightcol h3{font-size:15px;margin:0 0 10px}.member{display:flex;align-items:center;gap:9px;margin:12px 0}.member .btn{padding:7px 9px;font-size:12px}.notice{padding:12px;border-bottom:1px solid var(--border);overflow-wrap:anywhere}.notice:last-child{border-bottom:0}.empty{text-align:center;padding:28px 12px;color:var(--muted)}.profilehead{display:flex;gap:15px;align-items:center;flex-wrap:wrap}.profilehead .avatar{width:70px;height:70px;font-size:22px}.statrow{display:flex;gap:22px;margin:15px 0}.stat strong{display:block;color:var(--teal)}.hidden{display:none!important}footer{text-align:center;padding:20px;color:var(--muted);font-size:12px}.mobile-nav{display:none}
+@media(max-width:900px){.layout{grid-template-columns:175px minmax(0,1fr)}.rightcol{display:none}}
+@media(max-width:620px){.topinner{padding:10px 12px;gap:9px;flex-wrap:wrap}.brand{font-size:21px}.searchbox{order:3;flex-basis:100%;max-width:none}.top-actions{margin-left:auto}.top-actions .btn{padding:8px 10px}.layout{display:block;margin:13px auto;padding:0 10px}.sidebar{display:none}.hero{padding:19px}.hero h1{font-size:22px}.card{padding:13px;border-radius:14px}.mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:20;background:#fffffff5;border-top:1px solid var(--border);padding:7px 3px max(7px,env(safe-area-inset-bottom));justify-content:space-around}.mobile-nav button{border:0;background:transparent;color:var(--muted);padding:6px 9px;font-size:11px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:2px}.mobile-nav button.active{color:var(--teal)}body{padding-bottom:72px}.postactions{gap:2px}.action{font-size:12px;min-width:60px}}
+</style>
 </head>
-
 <body>
-  <header>
-    <h1>ConnectUp 🌐</h1>
-    <p>Meet people. Share ideas. Stay connected.</p>
-  </header>
-
-  <main>
-    <section id="home">
-      <div class="card">
-        <h2>What's on your mind?</h2>
-        <textarea id="postInput"
-          maxlength="500"
-          placeholder="Share something with the community..."></textarea>
-        <button onclick="createPost()">Publish post</button>
-      </div>
-
-      <h2>Community Feed</h2>
-      <div id="feed"></div>
-    </section>
-
-    <section id="profile" class="hidden">
-      <div class="card">
-        <h2>My Profile 👤</h2>
-        <div class="avatar">😊</div>
-        <p>Welcome to your ConnectUp profile!</p>
-
-        <label for="username">Your display name</label>
-        <input id="username" maxlength="30"
-          placeholder="Enter your name">
-
-        <button onclick="saveProfile()">Save profile</button>
-        <p id="profileMessage" class="muted"></p>
-      </div>
-
-      <div class="card">
-        <h2>My activity</h2>
-        <p id="postCount">Your posts: 0</p>
-        <p id="likeCount">Likes received: 0</p>
-      </div>
-    </section>
-  </main>
-
-  <nav>
-    <button id="homeTab" class="active"
-      onclick="showPage('home')">🏠 Home</button>
-    <button onclick="showPage('profile')">👤 Profile</button>
-  </nav>
-
-  <script>
-    const starterPosts = [
-      {
-        id: 1,
-        name: "ConnectUp Team",
-        text: "Welcome to ConnectUp! 🎉 Share your first post and meet the community.",
-        likes: 2,
-        liked: false,
-        mine: false
-      },
-      {
-        id: 2,
-        name: "Alex",
-        text: "What is everyone learning or working on today? 🚀",
-        likes: 1,
-        liked: false,
-        mine: false
-      }
-    ];
-
-    let posts = starterPosts;
-    let username = "New Member";
-    let nextId = 3;
-
-    try {
-      const savedPosts = localStorage.getItem("connectupPosts");
-      const savedName = localStorage.getItem("connectupName");
-
-      if (savedPosts) posts = JSON.parse(savedPosts);
-      if (savedName) username = savedName;
-
-      nextId = Math.max(3, ...posts.map(p => p.id + 1));
-    } catch (error) {
-      console.log("Using temporary app data.");
-    }
-
-    function saveData() {
-      try {
-        localStorage.setItem("connectupPosts", JSON.stringify(posts));
-        localStorage.setItem("connectupName", username);
-      } catch (error) {
-        console.log("Could not save data on this browser.");
-      }
-    }
-
-    function safeText(text) {
-      return String(text).replace(/[&<>"']/g, char => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;"
-      })[char]);
-    }
-
-    function renderFeed() {
-      const feed = document.getElementById("feed");
-
-      if (posts.length === 0) {
-        feed.innerHTML =
-          '<div class="card empty">No posts yet. Be the first to share!</div>';
-        updateStats();
-        return;
-      }
-
-      feed.innerHTML = posts.map(post => `
-        <article class="card">
-          <div class="post-head">
-            <div class="avatar">😊</div>
-            <div>
-              <strong>${safeText(post.name)}</strong>
-              <div class="muted">ConnectUp member</div>
-            </div>
-          </div>
-
-          <div class="post-text">${safeText(post.text)}</div>
-
-          <div class="post-actions">
-            <button class="like-btn ${post.liked ? "liked" : ""}"
-              onclick="toggleLike(${post.id})">
-              ${post.liked ? "❤️ Liked" : "🤍 Like"}
-              · ${post.likes}
-            </button>
-
-            ${post.mine ? `
-              <button onclick="deletePost(${post.id})">
-                Delete
-              </button>` : ""}
-          </div>
-        </article>
-      `).join("");
-
-      updateStats();
-    }
-
-    function createPost() {
-      const input = document.getElementById("postInput");
-      const text = input.value.trim();
-
-      if (!text) {
-        alert("Please write something before publishing.");
-        return;
-      }
-
-      posts.unshift({
-        id: nextId++,
-        name: username,
-        text: text,
-        likes: 0,
-        liked: false,
-        mine: true
-      });
-
-      input.value = "";
-      saveData();
-      renderFeed();
-      showPage("home");
-    }
-
-    function toggleLike(id) {
-      const post = posts.find(p => p.id === id);
-      if (!post) return;
-
-      post.liked = !post.liked;
-      post.likes += post.liked ? 1 : -1;
-
-      saveData();
-      renderFeed();
-    }
-
-    function deletePost(id) {
-      const post = posts.find(p => p.id === id);
-      if (!post || !post.mine) return;
-
-      if (confirm("Delete this post?")) {
-        posts = posts.filter(p => p.id !== id);
-        saveData();
-        renderFeed();
-      }
-    }
-
-    function saveProfile() {
-      const input = document.getElementById("username");
-      const newName = input.value.trim();
-
-      if (!newName) {
-        alert("Please enter a display name.");
-        return;
-      }
-
-      username = newName;
-      saveData();
-
-      document.getElementById("profileMessage").textContent =
-        "Profile name saved!";
-
-      renderFeed();
-    }
-
-    function updateStats() {
-      const myPosts = posts.filter(p => p.mine);
-      const myLikes = myPosts.reduce((sum, p) => sum + p.likes, 0);
-
-      document.getElementById("postCount").textContent =
-        "Your posts: " + myPosts.length;
-
-      document.getElementById("likeCount").textContent =
-        "Likes received: " + myLikes;
-    }
-
-    function showPage(page) {
-      document.getElementById("home").classList.toggle(
-        "hidden", page !== "home"
-      );
-
-      document.getElementById("profile").classList.toggle(
-        "hidden", page !== "profile"
-      );
-
-      document.getElementById("homeTab").classList.toggle(
-        "active", page === "home"
-      );
-
-      if (page === "profile") {
-        document.getElementById("username").value = username;
-        updateStats();
-      }
-    }
-
-    renderFeed();
-  </script>
+<header class="topbar"><div class="topinner">
+  <div class="brand">Connect<span>Up</span></div>
+  <div class="searchbox"><input id="search" type="search" placeholder="Search posts and people..." aria-label="Search posts and people"></div>
+  <div class="top-actions"><button class="iconbtn" onclick="showPage('notifications')" aria-label="Notifications">🔔<span id="noticeBadge" class="dot hidden">0</span></button><button class="btn light" onclick="showPage('profile')">My Profile</button></div>
+</div></header>
+<div class="layout">
+<aside class="sidebar panel">
+  <div class="sideprofile"><div class="cardhead"><div class="avatar" id="sideAvatar">P</div><div class="grow"><div class="name" id="sideName">Phantom</div><div class="small">ConnectUp member</div></div></div></div>
+  <button class="navitem active" data-page="home" onclick="showPage('home')">⌂ &nbsp; Home</button>
+  <button class="navitem" data-page="search" onclick="showPage('search')">⌕ &nbsp; Explore</button>
+  <button class="navitem" data-page="profile" onclick="showPage('profile')">♙ &nbsp; Profile</button>
+  <button class="navitem" data-page="notifications" onclick="showPage('notifications')">♧ &nbsp; Notifications</button>
+  <p class="small" style="padding:8px">Meet people. Share ideas. Stay connected.</p>
+</aside>
+<main>
+<section id="homePage">
+  <div class="hero panel"><h1>Meet people. Share ideas. Stay connected.</h1><p>Your community starts with a conversation.</p></div>
+  <section class="card composer">
+    <div class="cardhead"><div class="avatar" id="composerAvatar">P</div><div><div class="name" id="composerName">Phantom</div><div class="small">Share with the community</div></div></div>
+    <textarea id="postText" maxlength="2000" placeholder="What's on your mind?"></textarea>
+    <div id="photoPreview"></div>
+    <div class="composebar"><label class="photo-label">＋ Add photo<input id="photoInput" type="file" accept="image/*"></label><button class="btn" onclick="publishPost()">Publish post</button></div>
+    <p class="small">Photos are saved in this browser. Use small images to avoid filling browser storage.</p>
+  </section>
+  <div class="filters"><button class="chip active" id="allFilter" onclick="setFilter('all')">All posts</button><button class="chip" id="followingFilter" onclick="setFilter('following')">Following</button></div>
+  <div id="feed"></div>
+</section>
+<section id="searchPage" class="hidden"><div class="card"><h2>Explore ConnectUp</h2><p class="muted">Search posts and member names using the search bar above.</p><div id="searchResults"></div></div></section>
+<section id="profilePage" class="hidden">
+  <div class="card"><div class="profilehead"><div class="avatar" id="profileAvatar">P</div><div class="grow"><h2 id="profileName" style="margin:0">Phantom</h2><div class="muted" id="profileBio">ConnectUp member</div></div></div>
+    <div class="statrow"><div class="stat"><strong id="myPosts">0</strong><span class="small">Posts</span></div><div class="stat"><strong id="followingCount">0</strong><span class="small">Following</span></div><div class="stat"><strong id="followerCount">0</strong><span class="small">Followers here</span></div></div>
+    <h3>Edit your profile</h3><label class="small" for="editName">Display name</label><input class="field" id="editName" maxlength="40" placeholder="Your display name">
+    <label class="small" for="editBio">Bio</label><textarea class="field" id="editBio" maxlength="180" placeholder="Tell the community about yourself" style="margin-top:8px"></textarea>
+    <label class="photo-label" style="margin:10px 0">＋ Profile photo<input id="avatarInput" type="file" accept="image/*"></label><button class="btn" onclick="saveProfile()">Save profile</button>
+  </div><h3>Your posts</h3><div id="profileFeed"></div>
+</section>
+<section id="notificationsPage" class="hidden"><div class="card"><h2>Notifications</h2><p class="muted">Your activity on this device.</p><button class="btn light" onclick="clearNotifications()">Clear notifications</button><div id="notificationsList" style="margin-top:12px"></div></div></section>
+</main>
+<aside class="rightcol"><div class="card"><h3>People to discover</h3><div id="suggestions"></div></div><div class="card"><h3>About ConnectUp</h3><p class="small">A place to meet people, exchange ideas and build community.</p><p class="small">This demo stores activity only in this browser.</p></div></aside>
+</div>
+<nav class="mobile-nav"><button class="active" data-page="home" onclick="showPage('home')"><span>⌂</span>Home</button><button data-page="search" onclick="showPage('search')"><span>⌕</span>Explore</button><button data-page="profile" onclick="showPage('profile')"><span>♙</span>Profile</button><button data-page="notifications" onclick="showPage('notifications')"><span>♧</span>Alerts</button></nav>
+<footer>ConnectUp · Meet people. Share ideas. Stay connected.</footer>
+<script>
+const STORE="connectup_modern_v1";
+const DEFAULT_POSTS=[
+{id:"welcome-team",author:"ConnectUp Team",text:"Welcome to ConnectUp! 🎉 Share your first post and meet the community.",likes:2,liked:false,comments:[],photo:"",time:Date.now()-300000},
+{id:"welcome-alex",author:"Alex",text:"What is everyone learning or working on today? 🚀",likes:1,liked:false,comments:[],photo:"",time:Date.now()-200000}
+];
+let data=null;
+try{data=JSON.parse(localStorage.getItem(STORE));}catch(e){}
+if(!data||!Array.isArray(data.posts)){data={me:{name:"Phantom",bio:"Hello! I'm new to ConnectUp.",avatar:""},posts:DEFAULT_POSTS,following:[],notifications:[],readCount:0};}
+data.me=data.me||{name:"Phantom",bio:"",avatar:""};data.posts=data.posts||[];data.following=data.following||[];data.notifications=data.notifications||[];data.readCount=data.readCount||0;
+let activeFilter="all",pendingPhoto="";
+function save(){try{localStorage.setItem(STORE,JSON.stringify(data));}catch(e){alert("Browser storage is full. Try a smaller photo or remove old posts.");}}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function initial(n){return (n||"?").trim().slice(0,1).toUpperCase()||"?";}
+function avatar(n,photo="",cls="avatar"){return `<div class="${cls}">${photo?`<img src="${photo}" alt="">`:esc(initial(n))}</div>`;}
+function me(){return data.me.name||"Phantom";}
+function ago(t){let m=Math.max(0,Math.floor((Date.now()-(t||Date.now()))/60000));return m<1?"just now":m<60?m+"m ago":m<1440?Math.floor(m/60)+"h ago":Math.floor(m/1440)+"d ago";}
+function notify(message){data.notifications.unshift({id:Date.now()+Math.random(),message,time:Date.now()});data.notifications=data.notifications.slice(0,80);save();renderNotifications();badge();}
+function badge(){let n=Math.max(0,data.notifications.length-data.readCount),b=document.getElementById("noticeBadge");b.textContent=n>99?"99+":String(n);b.classList.toggle("hidden",n<=0);}
+function setFilter(f){activeFilter=f;document.getElementById("allFilter").classList.toggle("active",f==="all");document.getElementById("followingFilter").classList.toggle("active",f==="following");renderFeed();}
+function showPage(page){["home","search","profile","notifications"].forEach(p=>document.getElementById(p+"Page").classList.toggle("hidden",p!==page));document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===page));if(page==="notifications"){data.readCount=data.notifications.length;save();badge();}if(page==="profile"){document.getElementById("editName").value=me();document.getElementById("editBio").value=data.me.bio||"";}renderAll();window.scrollTo({top:0,behavior:"smooth"});}
+function publishPost(){let input=document.getElementById("postText"),text=input.value.trim();if(!text&&!pendingPhoto){alert("Write something or add a photo first.");return;}data.posts.unshift({id:"p"+Date.now()+Math.random().toString(16).slice(2),author:me(),text,photo:pendingPhoto,likes:0,liked:false,mine:true,comments:[],time:Date.now()});input.value="";pendingPhoto="";document.getElementById("photoPreview").innerHTML="";document.getElementById("photoInput").value="";save();renderAll();showPage("home");}
+function postById(id){return data.posts.find(p=>String(p.id)===String(id));}
+function toggleLike(id){let p=postById(id);if(!p)return;p.liked=!p.liked;p.likes=Math.max(0,(p.likes||0)+(p.liked?1:-1));if(p.liked&&p.author!==me())notify("You liked "+p.author+"'s post.");save();renderAll();}
+function deletePost(id){let p=postById(id);if(!p||!(p.mine||p.author===me())){alert("You can delete only your own posts.");return;}if(confirm("Delete this post?")){data.posts=data.posts.filter(x=>String(x.id)!==String(id));save();renderAll();}}
+function addComment(id){let input=document.getElementById("comment-"+id),text=input?input.value.trim():"";if(!text)return;let p=postById(id);if(!p)return;p.comments=p.comments||[];p.comments.push({author:me(),text,time:Date.now()});if(p.author!==me())notify("You commented on "+p.author+"'s post.");save();renderAll();}
+function follow(name){if(!name||name===me())return;let i=data.following.indexOf(name);if(i>=0)data.following.splice(i,1);else{data.following.push(name);notify("You followed "+name+".");}save();renderAll();}
+function saveProfile(){let n=document.getElementById("editName").value.trim();if(!n){alert("Please enter a display name.");return;}let old=me();data.me.name=n;data.me.bio=document.getElementById("editBio").value.trim();data.posts.forEach(p=>{if(p.author===old&&(p.mine||old==="Phantom"||old==="New Member"))p.author=n;});save();renderAll();alert("Profile saved on this device.");}
+function clearNotifications(){if(!confirm("Clear your activity notifications?"))return;data.notifications=[];data.readCount=0;save();renderNotifications();badge();}
+function postCard(p){let own=!!p.mine||p.author===me(),comments=p.comments||[];return `<article class="card"><div class="cardhead">${avatar(p.author,own?data.me.avatar:"")}<div class="grow"><div class="name">${esc(p.author)}</div><div class="small">${ago(p.time)}</div></div>${!own?`<button class="btn light" onclick="follow('${esc(p.author).replace(/'/g,"&#39;")}')">${data.following.includes(p.author)?"Following":"＋ Follow"}</button>`:`<button class="btn danger" onclick="deletePost('${String(p.id).replace(/'/g,"")}')">Delete</button>`}</div>${p.text?`<div class="posttext">${esc(p.text)}</div>`:""}${p.photo?`<img class="postimage" src="${p.photo}" alt="Photo shared in a post">`:""}<div class="postactions"><button class="action ${p.liked?"liked":""}" onclick="toggleLike('${String(p.id).replace(/'/g,"")}')">${p.liked?"♥ Liked":"♡ Like"} · ${p.likes||0}</button><button class="action" onclick="document.getElementById('comments-${esc(String(p.id))}').classList.toggle('hidden')">💬 Comments · ${comments.length}</button></div><div class="comments hidden" id="comments-${esc(String(p.id))}">${comments.map(c=>`<div class="comment">${avatar(c.author)}<div class="commenttext"><strong>${esc(c.author)}</strong><div>${esc(c.text)}</div><div class="small">${ago(c.time)}</div></div></div>`).join("")}<div class="commentform"><input class="field" id="comment-${esc(String(p.id))}" maxlength="500" placeholder="Write a comment..."><button class="btn" onclick="addComment('${String(p.id).replace(/'/g,"")}')">Send</button></div></div></article>`;}
+function renderFeed(){let feed=document.getElementById("feed"),list=data.posts;if(activeFilter==="following")list=list.filter(p=>data.following.includes(p.author)||p.author===me());if(!list.length){feed.innerHTML='<div class="card empty">No posts here yet. Be the first to share!</div>';return;}feed.innerHTML=list.map(postCard).join("");}
+function renderProfileFeed(){let list=data.posts.filter(p=>p.author===me()&&(p.mine||p.author===me()));document.getElementById("profileFeed").innerHTML=list.length?list.map(postCard).join(""):'<div class="card empty">Your posts will appear here.</div>';}
+function renderSuggestions(){let names=[...new Set(data.posts.map(p=>p.author).filter(n=>n!==me()))].slice(0,8);document.getElementById("suggestions").innerHTML=names.length?names.map(n=>`<div class="member">${avatar(n)}<div class="grow"><strong>${esc(n)}</strong><div class="small">Member</div></div><button class="btn light" onclick="follow('${esc(n).replace(/'/g,"&#39;")}')">${data.following.includes(n)?"Following":"Follow"}</button></div>`).join(""):'<p class="small">More members will appear here as posts are added.</p>'; }
+function renderNotifications(){let el=document.getElementById("notificationsList");el.innerHTML=data.notifications.length?data.notifications.map(n=>`<div class="notice"><div>${esc(n.message)}</div><div class="small">${ago(n.time)}</div></div>`).join(""):'<div class="empty">No notifications yet.</div>';}
+function renderSearch(){let q=document.getElementById("search").value.trim().toLowerCase(),el=document.getElementById("searchResults");if(!q){el.innerHTML='<div class="empty">Type a name or keyword in the search bar above.</div>';return;}let matches=data.posts.filter(p=>(p.author+" "+p.text).toLowerCase().includes(q));el.innerHTML=matches.length?matches.map(postCard).join(""):'<div class="empty">No matching posts found.</div>';}
+function renderAll(){document.getElementById("sideName").textContent=me();document.getElementById("sideAvatar").innerHTML=data.me.avatar?`<img src="${data.me.avatar}" alt="">`:esc(initial(me()));document.getElementById("composerName").textContent=me();document.getElementById("composerAvatar").innerHTML=data.me.avatar?`<img src="${data.me.avatar}" alt="">`:esc(initial(me()));document.getElementById("profileName").textContent=me();document.getElementById("profileBio").textContent=data.me.bio||"ConnectUp member";document.getElementById("profileAvatar").innerHTML=data.me.avatar?`<img src="${data.me.avatar}" alt="">`:esc(initial(me()));document.getElementById("myPosts").textContent=data.posts.filter(p=>p.author===me()&&(p.mine||p.author===me())).length;document.getElementById("followingCount").textContent=data.following.length;document.getElementById("followerCount").textContent="—";renderFeed();renderProfileFeed();renderSuggestions();renderNotifications();renderSearch();badge();}
+function readImage(file,callback){if(!file)return;if(!file.type.startsWith("image/")){alert("Please choose an image file.");return;}if(file.size>1200000){alert("Please choose an image under 1.2 MB so browser storage does not fill up.");return;}let reader=new FileReader();reader.onload=()=>callback(reader.result);reader.readAsDataURL(file);}
+document.getElementById("photoInput").addEventListener("change",e=>readImage(e.target.files[0],src=>{pendingPhoto=src;document.getElementById("photoPreview").innerHTML=`<img class="preview" src="${src}" alt="Photo preview"><button class="btn ghost" onclick="pendingPhoto='';document.getElementById('photoPreview').innerHTML='';document.getElementById('photoInput').value=''">Remove photo</button>`;}));
+document.getElementById("avatarInput").addEventListener("change",e=>readImage(e.target.files[0],src=>{data.me.avatar=src;save();renderAll();}));
+document.getElementById("search").addEventListener("input",()=>{if(!document.getElementById("searchPage").classList.contains("hidden"))renderSearch();else if(document.getElementById("search").value.trim())showPage("search");});
+renderAll();
+</script>
 </body>
 </html>
