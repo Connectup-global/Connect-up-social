@@ -19,7 +19,35 @@ button,input,textarea{font:inherit}button{cursor:pointer}.top{position:sticky;to
 .posttext{white-space:pre-wrap;overflow-wrap:anywhere;margin:14px 0}.media{width:100%;max-height:460px;object-fit:contain;border-radius:12px;background:#f5f8f8;margin:8px 0}.actions{display:flex;gap:8px;flex-wrap:wrap;border-top:1px solid var(--border);padding-top:10px}.action{border:0;background:transparent;color:var(--muted);padding:8px;font-weight:700}
 .comment{background:#f4f8f8;border-radius:10px;padding:9px;margin:7px 0;overflow-wrap:anywhere}.status{padding:10px 12px;border-radius:10px;background:var(--mint);color:var(--dark);margin:10px 0}.status.error{background:#fff0f0;color:var(--danger)}
 h1{font-size:25px;margin:0 0 6px}h2{font-size:20px;margin:0 0 10px}.foot{text-align:center;color:var(--muted);font-size:12px;padding:20px}
-@media(max-width:600px){.wrap{margin:12px auto}.card{padding:13px}.topin .btn{padding:8px 10px}}
+@media (max-width: 600px) {
+  .wrap { margin: 12px auto; }
+  .card { padding: 13px; }
+  .topin {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 8px;
+  }
+  .brand { font-size: 23px; white-space: nowrap; }
+  .topin .grow {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    min-width: 0;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  .topin #authButton,
+  .topin #signOutButton {
+    grid-column: 2;
+    grid-row: 1;
+    padding: 8px 10px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  .media { max-height: 350px; }
+  .actions { gap: 4px; }
+  .action { padding: 7px 5px; }
+}
 </style>
 </head>
 <body>
