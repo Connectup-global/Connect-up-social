@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#087f73">
-<title>ConnectUp — Community</title>
+<meta name="theme-color" content="#082725">
+<title>ConnectUp — Luxury Connections</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
@@ -83,18 +83,46 @@ label{font-size:13px;font-weight:700;color:#36524e}
  .media{max-height:380px}.actions{gap:2px}.action{padding:8px 6px;font-size:13px}
  .posthead .btn{padding:8px 10px;font-size:12px}
 }
+
+/* ConnectUp welcome-screen redesign: authentication only */
+body{min-height:100vh;background:radial-gradient(ellipse at 15% 15%,rgba(117,231,211,.55),transparent 35%),radial-gradient(ellipse at 90% 85%,rgba(4,105,94,.55),transparent 38%),linear-gradient(135deg,#062f32 0%,#087f73 48%,#0b514d 100%);background-attachment:fixed;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 14px;position:relative;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background-image:radial-gradient(rgba(255,255,255,.8) 1px,transparent 1px);background-size:24px 24px;mask-image:linear-gradient(to bottom,black,transparent 90%)}
+.top{position:relative;z-index:1;background:transparent;border:0;backdrop-filter:none;width:100%;max-width:460px}
+.topin{justify-content:center;padding:0 0 22px;max-width:none}
+.brand{font-size:clamp(34px,8vw,48px);font-weight:950;letter-spacing:-1.8px;color:#fff;gap:12px;text-shadow:0 4px 22px #001d1c70}
+.brand span{color:#b8fff0}
+.brandmark{width:54px;height:54px;border-radius:18px;font-size:29px;background:linear-gradient(145deg,#173d3a,#082725);box-shadow:0 8px 25px #001f1d70;border:1px solid #d9b76a; color:#f3d58a}
+.brandmark svg{width:31px;height:31px;display:block;filter:drop-shadow(0 2px 4px #0005)}
+.brandmark .diamond-fill{fill:#e4bf67}
+.brandmark .diamond-line{fill:none;stroke:#fff1bd;stroke-width:1.5;stroke-linejoin:round}
+.top .tagline,.top #authButton,.top #signOutButton{display:none!important}
+.wrap{position:relative;z-index:1;width:100%;max-width:460px;margin:0;padding:0}
+#message{width:100%;max-width:460px;order:3;margin-top:12px}
+#authCard{display:block!important;background:rgba(255,255,255,.97);border:1px solid #ffffff99;border-radius:28px;padding:clamp(22px,6vw,34px);box-shadow:0 25px 90px #002b2b65;backdrop-filter:blur(18px);margin:0;animation:appear .45s ease-out}
+#authCard .eyebrow{background:#e4faf5;color:#087f73}
+#authCard h2{font-size:27px;letter-spacing:-.8px;margin-top:14px;color:#123d39}
+#authCard>p.muted{line-height:1.6;margin-bottom:22px}
+#authCard .auth-grid{display:grid;grid-template-columns:1fr;gap:0}
+#authCard .field{padding:14px 15px;border-radius:14px;background:#f7fbfa}
+#authCard .row{display:grid;grid-template-columns:1fr 1fr;margin-top:6px}
+#authCard .btn{padding:13px 12px;border-radius:14px;font-weight:850}
+#authCard .btn.secondary{border:1px solid #cbece5}
+.layout,.foot{display:none!important}
+@keyframes appear{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:520px){body{padding:20px 14px}.topin{padding-bottom:18px}.brandmark{width:48px;height:48px}#authCard{border-radius:23px}.wrap{margin:0}}
+
 </style>
 </head>
 <body>
 <header class="top"><div class="topin">
- <div class="brand"><div class="brandmark">C</div><div>Connect<span>Up</span></div></div>
+ <div class="brand"><div class="brandmark" aria-label="ConnectUp luxury diamond emblem"><svg viewBox="0 0 40 40" role="img" aria-hidden="true"><path class="diamond-fill" d="M20 3 35 15 20 37 5 15Z"/><path class="diamond-line" d="M5 15h30M12 15l8 22 8-22M12 15l8-12 8 12"/></svg></div><div>Connect<span>Up</span></div></div>
  <div class="grow tagline">A little closer, wherever you are.</div>
  <button id="authButton" class="btn secondary" onclick="toggleAuth()">Sign in / Join</button>
  <button id="signOutButton" class="btn danger hidden" onclick="signOut()">Sign out</button>
 </div></header>
 <div class="wrap">
  <div id="message" class="status hidden" role="status"></div>
- <section id="authCard" class="card hidden">
+ <section id="authCard" class="card">
   <span class="eyebrow">✨ Your community awaits</span><h2 style="margin-top:12px">Welcome to ConnectUp</h2>
   <p class="muted">Join the conversation, share moments, and connect with people.</p>
   <div class="auth-grid"><div><label for="email">Email address</label><input id="email" class="field" type="email" autocomplete="email" placeholder="you@example.com"></div>
@@ -151,7 +179,7 @@ async function addComment(postId){if(!currentUser){message('Sign in to comment.'
 async function toggleFollow(followingId){if(!currentUser){message('Sign in to follow members.',true);return;}if(followingId===currentUser.id)return;const{data:existing,error:readErr}=await sb.from('follows').select('follower_id').eq('follower_id',currentUser.id).eq('following_id',followingId).maybeSingle();if(readErr){message(readErr.message,true);return;}const result=existing?await sb.from('follows').delete().eq('follower_id',currentUser.id).eq('following_id',followingId):await sb.from('follows').insert({follower_id:currentUser.id,following_id:followingId});if(result.error)message(result.error.message,true);await loadFeed(feedMode);}
 async function deletePost(id){if(!currentUser||!confirm('Delete this post?'))return;const{error}=await sb.from('posts').delete().eq('id',id).eq('user_id',currentUser.id);if(error){message('Could not delete post: '+error.message,true);return;}message('Post deleted.');await loadFeed(feedMode);}
 async function loadMyPosts(){await loadFeed('mine');}
-(async function init(){try{const{data,error}=await sb.auth.getSession();if(error)throw error;currentUser=data.session?.user||null;await updateAuthUI();await loadFeed('all');sb.auth.onAuthStateChange(async()=>{await updateAuthUI();await loadFeed('all');});}catch(err){console.error(err);message('ConnectUp could not connect to Supabase. Check your project URL, publishable key, and internet connection.',true);el('feed').innerHTML='<div class="card">Could not connect to Supabase. Please check your connection settings.</div>';}})();
+(async function init(){try{const{data,error}=await sb.auth.getSession();if(error)throw error;currentUser=data.session?.user||null;await updateAuthUI();sb.auth.onAuthStateChange(async()=>{await updateAuthUI();});}catch(err){console.error(err);message('ConnectUp could not connect to Supabase. Check your project URL, publishable key, and internet connection.',true);el('feed').innerHTML='<div class="card">Could not connect to Supabase. Please check your connection settings.</div>';}})();
 </script>
 </body>
 </html>
