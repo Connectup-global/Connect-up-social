@@ -84,8 +84,10 @@ label{font-size:13px;font-weight:700;color:#36524e}
  .posthead .btn{padding:8px 10px;font-size:12px}
 }
 
-/* ConnectUp premium dark welcome screen; community features appear only after sign-in */
-body{min-height:100vh;background:radial-gradient(ellipse at 12% 10%,rgba(212,175,85,.17),transparent 34%),radial-gradient(ellipse at 90% 85%,rgba(0,125,111,.22),transparent 38%),linear-gradient(135deg,#030b0b 0%,#071b1a 48%,#102c28 100%);background-attachment:fixed;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 14px;position:relative;overflow-x:hidden}
+/* ConnectUp luxury forest-green welcome screen */
+:root{--teal:#087f73;--teal-dark:#064c40;--mint:#e5f7f3;--mint-2:#f0fbf8;--bg:#041a15;--surface:#fff;--text:#183331;--muted:#718582;--border:#d9b76a;--danger:#b42332;--shadow:0 12px 35px rgba(0,0,0,.18)}
+
+body{min-height:100vh;background:radial-gradient(ellipse at 50% 18%,rgba(0,132,98,.48),transparent 38%),radial-gradient(ellipse at 10% 88%,rgba(17,100,70,.34),transparent 35%),radial-gradient(ellipse at 90% 80%,rgba(201,168,92,.12),transparent 30%),linear-gradient(145deg,#03120f 0%,#06372b 45%,#02100d 100%);background-attachment:fixed;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 14px;position:relative;overflow-x:hidden}
 body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.12;background-image:linear-gradient(135deg,transparent 48%,rgba(220,185,105,.5) 49%,transparent 50%);background-size:48px 48px;mask-image:linear-gradient(to bottom,black,transparent 90%)}
 .top{position:relative;z-index:1;background:transparent;border:0;backdrop-filter:none;width:100%;max-width:460px}
 .topin{justify-content:center;padding:0 0 22px;max-width:none}
@@ -98,12 +100,12 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.12;ba
 .top .tagline,.top #authButton,.top #signOutButton{display:none!important}
 .wrap{position:relative;z-index:1;width:100%;max-width:460px;margin:0;padding:0}
 #message{width:100%;max-width:460px;order:3;margin-top:12px}
-#authCard{display:block!important;background:linear-gradient(155deg,rgba(18,35,32,.98),rgba(7,18,17,.98));color:#f6f2e8;border:1px solid #b99851;border-radius:28px;padding:clamp(22px,6vw,34px);box-shadow:0 25px 90px #000b,0 0 35px #d7b75a12;backdrop-filter:blur(18px);margin:0;animation:appear .45s ease-out}
-#authCard .eyebrow{background:#30291b;color:#e4bf67}
+#authCard{display:block!important;background:linear-gradient(155deg,rgba(7,48,38,.97),rgba(3,24,19,.98));color:#f6f2e8;border:1px solid #b99851;border-radius:28px;padding:clamp(22px,6vw,34px);box-shadow:0 25px 90px #000b,0 0 35px #d7b75a12;backdrop-filter:blur(18px);margin:0;animation:appear .45s ease-out}
+#authCard .eyebrow{background:#163b2d;color:#e4bf67}
 #authCard h2{font-size:27px;letter-spacing:-.8px;margin-top:14px;color:#fff7e5}
 #authCard>p.muted{line-height:1.6;margin-bottom:22px}
 #authCard .auth-grid{display:grid;grid-template-columns:1fr;gap:0}
-#authCard .field{padding:14px 15px;border-radius:14px;background:#0b1716;color:#fff;border:1px solid #354b43}
+#authCard .field{padding:14px 15px;border-radius:14px;background:#09271f;color:#fff;border:1px solid #426b58}
 #authCard .row{display:grid;grid-template-columns:1fr 1fr;margin-top:6px}
 #authCard .btn{padding:13px 12px;border-radius:14px;font-weight:850}
 #authCard .btn.secondary{border:1px solid #b99851;background:#172522;color:#f4d98d}
