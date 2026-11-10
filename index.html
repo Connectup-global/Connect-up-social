@@ -118,4 +118,4 @@ async function deletePost(id){if(!confirm('Delete this post?'))return;const{erro
 (async function init(){try{const{data,error}=await sb.auth.getSession();if(error)throw error;currentUser=data.session?.user||null;await updateAuthUI();if(currentUser){await ensureProfile();await loadFeed('all');await loadStories()}else el('feed').innerHTML='<div class="card empty">Welcome to ConnectUp. Sign in or join to get started.</div>';sb.auth.onAuthStateChange((_event,session)=>{currentUser=session?.user||null;setTimeout(async()=>{await updateAuthUI();if(currentUser){await ensureProfile();await loadFeed('all')}},0)})}catch(err){console.error(err);message('ConnectUp could not connect to Supabase. Check your project URL, publishable key, and internet connection.',true)}})();
 </script>
 </body>
- </html>
+</html>
