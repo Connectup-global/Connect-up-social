@@ -818,26 +818,35 @@ async function loadNotifications(){
 }
 
 // ==========================================
-// GROUPS
+// GROUPS — UPDATED
 // ==========================================
 
 async function createGroup(){
+  if(!currentUser)return toast("Please sign in first.");
+
   const name=el("groupName").value.trim();
   const description=el("groupDescription").value.trim();
+
   if(!name)return toast("Enter a group name.");
 
   const {data:group,error}=await db.from("groups").insert({
-    name,description,owner_id:currentUser.id
+    name,
+    description,
+    owner_id:currentUser.id
   }).select().single();
 
   if(error)return toast(error.message);
 
   const {error:memberError}=await db.from("group_members").insert({
-    group_id:group.id,user_id:currentUser.id
+    group_id:group.id,
+    user_id:currentUser.id
   });
 
-  if(memberError)toast("Group created, but joining it failed: "+memberError.message);
-  else toast("Group created successfully.");
+  if(memberError && memberError.code!=="23505"){
+    toast("Group created, but joining failed: "+memberError.message);
+  }else{
+    toast("Group created successfully.");
+  }
 
   el("groupName").value="";
   el("groupDescription").value="";
@@ -846,32 +855,69 @@ async function createGroup(){
 
 async function loadGroups(){
   if(!currentUser)return;
-  const {data,error}=await db.from("groups").select("*")
+
+  const {data:groups,error}=await db.from("groups")
+    .select("*")
     .order("created_at",{ascending:false});
+
   if(error)return toast(error.message);
 
+  const {data:memberships,error:memberError}=await db
+    .from("group_members")
+    .select("group_id")
+    .eq("user_id",currentUser.id);
+
+  if(memberError)return toast(memberError.message);
+
+  const joinedGroups=new Set(
+    (memberships||[]).map(member=>member.group_id)
+  );
+
   const container=el("groupsList");
-  if(!data?.length){
+
+  if(!groups?.length){
     container.innerHTML=`<div class="card empty-state">No groups yet. Create the first one!</div>`;
     return;
   }
 
-  container.innerHTML=data.map(group=>`
-    <div class="card">
-      <h3>${escapeHTML(group.name)}</h3>
-      <p class="muted">${escapeHTML(group.description||"")}</p>
-      <button class="primary-btn" onclick="joinGroup('${group.id}')">Join group</button>
-      <button class="secondary-btn" onclick="openGroupChat('${group.id}','${escapeHTML(group.name)}')">Group chat</button>
-    </div>`).join("");
+  container.innerHTML=groups.map(group=>{
+    const joined=joinedGroups.has(group.id);
+
+    return `
+      <div class="card">
+        <h3>${escapeHTML(group.name)}</h3>
+        <p class="muted">${escapeHTML(group.description||"")}</p>
+
+        ${
+          joined
+          ? `<button class="primary-btn" disabled>Joined ✓</button>`
+          : `<button class="primary-btn" onclick="joinGroup('${group.id}')">Join group</button>`
+        }
+
+        <button class="secondary-btn"
+          onclick="openGroupChat('${group.id}','${escapeHTML(group.name)}')">
+          Group chat
+        </button>
+      </div>
+    `;
+  }).join("");
 }
 
 async function joinGroup(groupId){
+  if(!currentUser)return toast("Please sign in first.");
+
   const {error}=await db.from("group_members").insert({
-    group_id:groupId,user_id:currentUser.id
+    group_id:groupId,
+    user_id:currentUser.id
   });
 
-  if(error&&error.code!=="23505")return toast(error.message);
-  toast("You joined the group.");
+  if(error && error.code!=="23505"){
+    return toast(error.message);
+  }
+
+  toast(error ? "You are already in this group." : "You joined the group!");
+
+  await loadGroups();
 }
 
 // ==========================================
@@ -911,8 +957,11 @@ async function sendGroupMessage(){
   if(!content)return;
 
   const {error}=await db.from("group_messages").insert({
-    group_id:activeGroupChat,sender_id:currentUser.id,content
+    group_id:activeGroupChat,
+    sender_id:currentUser.id,
+    content
   });
+
   if(error)return toast(error.message);
 
   input.value="";
@@ -968,8 +1017,11 @@ async function sendDirectMessage(){
   if(!activeChatUser)return toast("Choose a conversation first.");
 
   const {error}=await db.from("direct_messages").insert({
-    sender_id:currentUser.id,recipient_id:activeChatUser,content
+    sender_id:currentUser.id,
+    recipient_id:activeChatUser,
+    content
   });
+
   if(error)return toast(error.message);
 
   el("messageText").value="";
