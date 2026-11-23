@@ -1,84 +1,94 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#087f73">
+<meta name="theme-color" content="#ffffff">
+<meta name="color-scheme" content="light">
 <meta name="description" content="ConnectUp — meet people, share ideas and stay connected.">
 <title>ConnectUp — Meet. Share. Connect.</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-:root{--primary:#087f73;--dark:#065b54;--light:#e8f7f4;--gold:#d4ad55;--bg:#f4f7f7;--white:#fff;--text:#172b2a;--muted:#71817f;--border:#e5eceb;--shadow:0 5px 22px rgba(0,0,0,.06)}
+:root{color-scheme:light;--primary:#087f73;--dark:#065b54;--light:#e8f7f4;--gold:#d4ad55;--bg:#fff;--white:#fff;--text:#172b2a;--muted:#71817f;--border:#e9eeee;--shadow:0 4px 18px rgba(0,0,0,.045)}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;font-size:14px}
-button,input,textarea,select{font:inherit}button{cursor:pointer}.hidden{display:none!important}.muted{color:var(--muted)}.small{font-size:12px}
-header{height:62px;background:white;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 5%;position:sticky;top:0;z-index:20}
-.logo{color:var(--primary);font-size:22px;font-weight:800;letter-spacing:-.8px}.logo span{color:var(--gold)}
-.header-actions{display:flex;align-items:center;gap:12px}.header-actions button{border:0;background:var(--light);color:var(--dark);padding:9px 13px;border-radius:20px}
-#app{max-width:1100px;margin:22px auto;padding:0 14px 80px}
-.auth-wrap{max-width:420px;margin:55px auto;background:white;border-radius:18px;padding:28px;box-shadow:var(--shadow)}
-.auth-wrap h1{margin:0 0 7px;font-size:25px}.auth-wrap p{color:var(--muted);line-height:1.5}
-.field{margin:14px 0}.field label{display:block;font-weight:600;margin-bottom:6px}
-.field input,.field textarea,.field select,.search-input,.message-input{width:100%;padding:12px;border:1px solid var(--border);border-radius:10px;outline:none;background:white}
+html,body{background:#fff!important;color:var(--text);color-scheme:light!important}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;font-size:13px}
+button,input,textarea,select{font:inherit}button{cursor:pointer}.hidden{display:none!important}.muted{color:var(--muted)}.small{font-size:11px}
+header{height:64px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 max(5%,calc((100% - 1100px)/2));position:sticky;top:0;z-index:20}
+.brand-wrap{display:flex;flex-direction:column;gap:1px}.logo{color:var(--primary);font-size:21px;font-weight:800;letter-spacing:-.8px}.logo span{color:var(--gold)}.header-tagline{font-size:10px;color:var(--muted);letter-spacing:.15px}
+.header-actions{display:flex;align-items:center;gap:9px}.header-profile{display:flex;align-items:center;gap:8px;border:0;background:transparent;padding:4px;color:var(--text);border-radius:22px}.header-profile:active{background:var(--light)}.header-avatar{width:32px;height:32px;border-radius:50%;overflow:hidden;background:var(--light);color:var(--dark);display:flex;align-items:center;justify-content:center;font-weight:700}.header-avatar img{width:100%;height:100%;object-fit:cover}
+#app{max-width:1100px;margin:20px auto;padding:0 14px 80px}
+.auth-wrap{max-width:420px;margin:55px auto;background:#fff;border:1px solid var(--border);border-radius:16px;padding:26px;box-shadow:var(--shadow)}
+.auth-wrap h1{margin:0 0 7px;font-size:23px}.auth-wrap p{color:var(--muted);line-height:1.5}
+.field{margin:13px 0}.field label{display:block;font-weight:600;margin-bottom:6px}
+.field input,.field textarea,.field select,.search-input,.message-input{width:100%;padding:11px;border:1px solid var(--border);border-radius:9px;outline:none;background:#fff;color:var(--text)}
 .field input:focus,.field textarea:focus,.search-input:focus,.message-input:focus{border-color:var(--primary)}
-.primary-btn{background:var(--primary);color:white;border:0;border-radius:10px;padding:11px 16px;font-weight:700}.primary-btn:hover{background:var(--dark)}
-.secondary-btn{background:var(--light);color:var(--dark);border:0;border-radius:10px;padding:10px 14px;font-weight:600}
+.primary-btn{background:var(--primary);color:#fff;border:0;border-radius:9px;padding:10px 15px;font-weight:700}.primary-btn:hover{background:var(--dark)}
+.secondary-btn{background:var(--light);color:var(--dark);border:0;border-radius:9px;padding:9px 12px;font-weight:600}
 .danger-btn{background:#fff0ef;color:#c0392b;border:0;border-radius:9px;padding:8px 11px}
-.text-btn{border:0;background:none;color:var(--primary);font-weight:700;padding:8px}.auth-switch{text-align:center;margin-top:17px}
-.main-layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:20px}
-.sidebar{background:white;border:1px solid var(--border);border-radius:15px;padding:12px;height:max-content;position:sticky;top:80px}
-.nav-btn{display:flex;align-items:center;gap:12px;width:100%;padding:12px;border:0;border-radius:10px;background:transparent;text-align:left;color:var(--text);margin:3px 0}
-.nav-btn.active,.nav-btn:hover{background:var(--light);color:var(--dark);font-weight:700}.nav-icon{width:22px;text-align:center;font-size:17px}
-.content{min-width:0}.page-title{font-size:21px;margin:4px 0 16px}
-.card{background:white;border:1px solid var(--border);border-radius:15px;padding:16px;margin-bottom:15px;box-shadow:0 2px 9px rgba(0,0,0,.025)}
-.card h3{margin:0 0 12px}.post-create textarea{width:100%;min-height:85px;resize:vertical;border:1px solid var(--border);border-radius:11px;padding:12px;outline:none}
-.post-create textarea:focus{border-color:var(--primary)}.create-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;flex-wrap:wrap}
-.create-actions input{max-width:100%;font-size:12px}
-.post-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.avatar{width:42px;height:42px;border-radius:50%;background:var(--light);color:var(--dark);display:flex;align-items:center;justify-content:center;font-weight:800;overflow:hidden;flex-shrink:0}
-.avatar img{width:100%;height:100%;object-fit:cover}.post-author{font-weight:700}.post-time{font-size:11px;color:var(--muted);margin-top:3px}
-.post-content{line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
-.post-media{width:100%;max-height:480px;object-fit:contain;background:#111;border-radius:12px;margin-top:12px}
-.post-actions{display:flex;gap:8px;flex-wrap:wrap;border-top:1px solid var(--border);margin-top:13px;padding-top:10px}
-.post-actions button{border:0;background:transparent;color:var(--muted);padding:7px 9px;border-radius:8px}
+.text-btn{border:0;background:none;color:var(--primary);font-weight:700;padding:8px}.auth-switch{text-align:center;margin-top:16px}
+.main-layout{display:grid;grid-template-columns:205px minmax(0,1fr);gap:18px}
+.sidebar{background:#fff;border:1px solid var(--border);border-radius:13px;padding:10px;height:max-content;position:sticky;top:80px}
+.nav-btn{display:flex;align-items:center;gap:11px;width:100%;padding:11px;border:0;border-radius:9px;background:transparent;text-align:left;color:var(--text);margin:3px 0}
+.nav-btn.active,.nav-btn:hover{background:var(--light);color:var(--dark);font-weight:700}.nav-icon{width:22px;text-align:center;font-size:16px}
+.content{min-width:0}.page-title{font-size:19px;margin:4px 0 14px}
+.card{background:#fff;border:1px solid var(--border);border-radius:13px;padding:14px;margin-bottom:13px;box-shadow:0 2px 8px rgba(0,0,0,.018)}
+.card h3{margin:0 0 10px;font-size:15px}.post-create textarea{width:100%;min-height:78px;resize:vertical;border:1px solid var(--border);border-radius:10px;padding:11px;outline:none;background:#fff;color:var(--text)}
+.post-create textarea:focus{border-color:var(--primary)}.create-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:9px;flex-wrap:wrap}
+.create-actions input{max-width:100%;font-size:11px}
+.post-head{display:flex;align-items:center;gap:9px;margin-bottom:10px}
+.avatar{width:39px;height:39px;border-radius:50%;background:var(--light);color:var(--dark);display:flex;align-items:center;justify-content:center;font-weight:800;overflow:hidden;flex-shrink:0}
+.avatar img{width:100%;height:100%;object-fit:cover}.post-author{font-weight:700}.post-time{font-size:10px;color:var(--muted);margin-top:3px}
+.post-content{line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+.post-media{width:100%;max-height:460px;object-fit:contain;background:#111;border-radius:10px;margin-top:10px}
+.post-actions{display:flex;gap:6px;flex-wrap:wrap;border-top:1px solid var(--border);margin-top:11px;padding-top:9px}
+.post-actions button{border:0;background:transparent;color:var(--muted);padding:7px 8px;border-radius:8px;font-size:12px}
 .post-actions button:hover{background:var(--light);color:var(--dark)}
-.comment-list{margin-top:10px}.comment-item{background:#f5f8f8;border-radius:10px;padding:9px 11px;margin:7px 0}
-.comment-form{display:flex;gap:7px;margin-top:10px}.comment-form input{flex:1;min-width:0}.comment-form button{white-space:nowrap}
-.profile-top{text-align:center}.profile-avatar{width:90px;height:90px;margin:0 auto 12px;border-radius:50%;overflow:hidden;background:var(--light);display:flex;align-items:center;justify-content:center;font-size:30px;color:var(--dark);font-weight:800}
+.comment-list{margin-top:9px}.comment-item{background:#f7f9f9;border-radius:9px;padding:8px 10px;margin:6px 0}
+.comment-form{display:flex;gap:7px;margin-top:9px}.comment-form input{flex:1;min-width:0}.comment-form button{white-space:nowrap}
+.profile-top{text-align:center}.profile-avatar{width:84px;height:84px;margin:0 auto 11px;border-radius:50%;overflow:hidden;background:var(--light);display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--dark);font-weight:800}
 .profile-avatar img{width:100%;height:100%;object-fit:cover}
-.profile-stats{display:flex;justify-content:center;gap:30px;margin:17px 0}.profile-stats strong{display:block;font-size:18px}.profile-stats span{font-size:12px;color:var(--muted)}
-.people-grid,.groups-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.person-card{text-align:center}.person-card .avatar{width:60px;height:60px;margin:0 auto 9px}
-.story-row{display:flex;gap:12px;overflow-x:auto;padding:4px 0 12px}.story-item{min-width:68px;text-align:center;cursor:pointer}
-.story-ring{width:58px;height:58px;border-radius:50%;padding:3px;background:linear-gradient(45deg,var(--gold),var(--primary));margin:0 auto 5px}
-.story-ring .avatar{width:100%;height:100%;border:2px solid white}.story-item small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.notification-item,.message-row{padding:12px;border-bottom:1px solid var(--border)}
+.profile-stats{display:flex;justify-content:center;gap:28px;margin:15px 0}.profile-stats strong{display:block;font-size:17px}.profile-stats span{font-size:11px;color:var(--muted)}
+.people-grid,.groups-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.person-card{text-align:center}.person-card .avatar{width:56px;height:56px;margin:0 auto 8px}
+.story-row{display:flex;gap:10px;overflow-x:auto;padding:3px 0 9px;scrollbar-width:thin}
+.story-item{min-width:59px;max-width:59px;text-align:center;cursor:pointer}
+.story-ring{width:49px;height:49px;border-radius:50%;padding:2px;background:linear-gradient(45deg,var(--gold),var(--primary));margin:0 auto 4px}
+.story-ring .avatar{width:100%;height:100%;border:2px solid white}
+.story-item small{display:block;font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.notification-item,.message-row{padding:11px;border-bottom:1px solid var(--border)}
 .notification-item:last-child,.message-row:last-child{border:0}
-.chat-box{height:300px;overflow-y:auto;background:#f6f9f8;border-radius:12px;padding:10px;margin:12px 0}
-.chat-bubble{max-width:82%;padding:9px 12px;border-radius:13px;margin:7px 0;background:white;overflow-wrap:anywhere}
+.chat-box{height:300px;overflow-y:auto;background:#f7f9f9;border-radius:10px;padding:10px;margin:11px 0}
+.chat-bubble{max-width:82%;padding:9px 11px;border-radius:12px;margin:7px 0;background:#fff;overflow-wrap:anywhere}
 .chat-bubble.mine{background:var(--light);margin-left:auto}.chat-compose{display:flex;gap:8px}.chat-compose input{flex:1;min-width:0}
-.reel-video{width:100%;max-height:600px;background:#111;border-radius:12px;object-fit:contain}
-.empty-state{text-align:center;padding:35px 15px;color:var(--muted)}.empty-state strong{display:block;color:var(--text);margin-bottom:6px}
-hr{border:0;border-top:1px solid var(--border);margin:15px 0}
-#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#172b2a;color:white;padding:11px 17px;border-radius:10px;z-index:100;box-shadow:var(--shadow);max-width:90%;text-align:center}
+.reel-video{width:100%;max-height:580px;background:#111;border-radius:10px;object-fit:contain}
+.empty-state{text-align:center;padding:32px 14px;color:var(--muted)}.empty-state strong{display:block;color:var(--text);margin-bottom:6px}
+hr{border:0;border-top:1px solid var(--border);margin:14px 0}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#172b2a;color:#fff;padding:10px 15px;border-radius:9px;z-index:100;box-shadow:var(--shadow);max-width:90%;text-align:center}
+.profile-signout{margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:flex;justify-content:center}
+.profile-signout button{background:#fff0ef;color:#bd382e;border:0;border-radius:9px;padding:9px 14px;font-weight:600}
 .mobile-nav{display:none}
 @media(max-width:720px){
-header{padding:0 14px}#app{margin:14px auto;padding:0 10px 85px}.main-layout{display:block}.sidebar{display:none}
-.people-grid,.groups-grid{grid-template-columns:1fr 1fr}.auth-wrap{margin:25px auto;padding:22px}
-.mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;height:62px;background:white;border-top:1px solid var(--border);justify-content:space-around;align-items:center;z-index:30;padding-bottom:env(safe-area-inset-bottom)}
-.mobile-nav button{border:0;background:none;color:var(--muted);font-size:19px;padding:8px 10px}.mobile-nav button.active{color:var(--primary)}
+header{padding:0 13px;height:60px}#app{margin:13px auto;padding:0 9px 85px}.main-layout{display:block}.sidebar{display:none}
+.people-grid,.groups-grid{grid-template-columns:1fr 1fr}.auth-wrap{margin:24px auto;padding:21px}
+.mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;height:62px;background:#fff;border-top:1px solid var(--border);justify-content:space-around;align-items:center;z-index:30;padding-bottom:env(safe-area-inset-bottom)}
+.mobile-nav button{border:0;background:none;color:var(--muted);font-size:18px;padding:8px 10px}.mobile-nav button.active{color:var(--primary)}
 }
 </style>
 </head>
 
 <body>
 <header>
-  <div class="logo">Connect<span>Up</span></div>
+  <div class="brand-wrap">
+    <div class="logo">Connect<span>Up</span></div>
+    <div class="header-tagline">Your community awaits</div>
+  </div>
   <div class="header-actions">
-    <span id="headerUser" class="small muted"></span>
-    <button id="headerSignOut" class="hidden" onclick="signOut()">Sign out</button>
+    <button id="headerProfileButton" class="header-profile hidden" onclick="showPage('profile')" aria-label="Open my profile">
+      <span id="headerUser" class="small"></span>
+      <span id="headerAvatar" class="header-avatar">C</span>
+    </button>
   </div>
 </header>
 
@@ -116,11 +126,12 @@ header{padding:0 14px}#app{margin:14px auto;padding:0 10px 85px}.main-layout{dis
 
 <main class="content">
 <section id="homePage" class="page">
-  <h2 class="page-title">Your community awaits ✨</h2>
   <div class="card">
-    <h3>Stories</h3>
-    <div id="storiesList" class="story-row"><div class="muted small">Loading stories...</div></div>
-    <button class="secondary-btn" onclick="openStoryCreator()">＋ Add a story</button>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+      <h3 style="margin:0">Stories</h3>
+      <button class="secondary-btn" onclick="openStoryCreator()">＋ Add story</button>
+    </div>
+    <div id="storiesList" class="story-row" style="margin-top:10px"><div class="muted small">Loading stories...</div></div>
   </div>
   <div class="card post-create">
     <h3>Share something</h3>
@@ -193,6 +204,9 @@ header{padding:0 14px}#app{margin:14px auto;padding:0 10px 85px}.main-layout{dis
     <button class="primary-btn" onclick="saveProfile()">Save profile</button>
   </div>
   <h3>Your posts</h3><div id="myPostsList"></div>
+  <div class="card profile-signout">
+    <button id="headerSignOut" onclick="signOut()">Sign out of ConnectUp</button>
+  </div>
 </section>
 </main>
 </div>
@@ -213,7 +227,6 @@ header{padding:0 14px}#app{margin:14px auto;padding:0 10px 85px}.main-layout{dis
 // ==========================================
 // CONNECTUP CONFIGURATION
 // ==========================================
-
 const SUPABASE_URL = "https://npfbdvbkjndueayeofxo.supabase.co";
 const SUPABASE_KEY = "sb_publishable_H1Djrliot9m4X1341tDbBw_BQhRQMTx";
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -227,297 +240,147 @@ let activeGroupName = "Group";
 let savedPostIds = new Set();
 
 function el(id){return document.getElementById(id)}
-
 function escapeHTML(value){
-  return String(value ?? "").replace(/[&<>"']/g,c=>({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-  })[c]);
+  return String(value ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
 }
-
 function toast(message){
-  const box=el("toast");
-  box.textContent=message;
-  box.classList.remove("hidden");
-  clearTimeout(window.toastTimer);
-  window.toastTimer=setTimeout(()=>box.classList.add("hidden"),3000);
+  const box=el("toast");box.textContent=message;box.classList.remove("hidden");
+  clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>box.classList.add("hidden"),3000);
 }
-
 function formatDate(date){return date?new Date(date).toLocaleString():""}
-
 function avatarHTML(profile){
   const name=profile?.display_name||profile?.username||"U";
-  if(profile?.avatar_url){
-    return `<div class="avatar"><img src="${escapeHTML(profile.avatar_url)}" alt=""></div>`;
-  }
+  if(profile?.avatar_url)return `<div class="avatar"><img src="${escapeHTML(profile.avatar_url)}" alt=""></div>`;
   return `<div class="avatar">${escapeHTML(name.charAt(0).toUpperCase())}</div>`;
+}
+function updateHeaderProfile(){
+  if(!currentUser)return;
+  const name=currentProfile?.display_name||currentUser.email?.split("@")[0]||"Profile";
+  el("headerUser").textContent=name;
+  el("headerAvatar").innerHTML=currentProfile?.avatar_url
+    ?`<img src="${escapeHTML(currentProfile.avatar_url)}" alt="">`
+    :escapeHTML(name.charAt(0).toUpperCase());
+  el("headerProfileButton").classList.remove("hidden");
 }
 
 // ==========================================
 // AUTHENTICATION
 // ==========================================
-
-function showSignup(){
-  el("loginForm").classList.add("hidden");
-  el("signupForm").classList.remove("hidden");
-}
-
-function showLogin(){
-  el("signupForm").classList.add("hidden");
-  el("loginForm").classList.remove("hidden");
-}
-
+function showSignup(){el("loginForm").classList.add("hidden");el("signupForm").classList.remove("hidden")}
+function showLogin(){el("signupForm").classList.add("hidden");el("loginForm").classList.remove("hidden")}
 async function signUp(){
-  const name=el("signupName").value.trim();
-  const email=el("signupEmail").value.trim();
-  const password=el("signupPassword").value;
-
+  const name=el("signupName").value.trim(),email=el("signupEmail").value.trim(),password=el("signupPassword").value;
   if(!name||!email||!password)return toast("Please complete all fields.");
   if(password.length<6)return toast("Password must be at least 6 characters.");
-
-  const {data,error}=await db.auth.signUp({
-    email,password,options:{data:{display_name:name}}
-  });
-
+  const {data,error}=await db.auth.signUp({email,password,options:{data:{display_name:name}}});
   if(error)return toast(error.message);
-
-  if(data.user&&data.session){
-    currentUser=data.user;
-    await loadOrCreateProfile(name);
-    await enterApp();
-  }else{
-    toast("Account created. Check your email to confirm, then log in.");
-    showLogin();
-  }
+  if(data.user&&data.session){currentUser=data.user;await loadOrCreateProfile(name);await enterApp()}
+  else{toast("Account created. Check your email to confirm, then log in.");showLogin()}
 }
-
 async function signIn(){
-  const email=el("loginEmail").value.trim();
-  const password=el("loginPassword").value;
+  const email=el("loginEmail").value.trim(),password=el("loginPassword").value;
   if(!email||!password)return toast("Enter your email and password.");
-
   const {data,error}=await db.auth.signInWithPassword({email,password});
   if(error)return toast(error.message);
-
-  currentUser=data.user;
-  await loadOrCreateProfile();
-  await enterApp();
+  currentUser=data.user;await loadOrCreateProfile();await enterApp();
 }
-
 async function signOut(){
-  const {error}=await db.auth.signOut();
-  if(error)return toast(error.message);
-
-  currentUser=null;
-  currentProfile=null;
-  activeChatUser=null;
-  activeGroupChat=null;
-  savedPostIds=new Set();
-
-  el("mainView").classList.add("hidden");
-  el("mobileNav").classList.add("hidden");
-  el("authView").classList.remove("hidden");
-  el("headerSignOut").classList.add("hidden");
-  el("headerUser").textContent="";
+  const {error}=await db.auth.signOut();if(error)return toast(error.message);
+  currentUser=null;currentProfile=null;activeChatUser=null;activeGroupChat=null;savedPostIds=new Set();
+  el("mainView").classList.add("hidden");el("mobileNav").classList.add("hidden");
+  el("authView").classList.remove("hidden");el("headerProfileButton").classList.add("hidden");
+  el("headerUser").textContent="";el("headerAvatar").textContent="C";
   toast("You have signed out.");
 }
-
 async function loadOrCreateProfile(displayName=""){
-  const {data,error}=await db.from("profiles")
-    .select("*").eq("id",currentUser.id).maybeSingle();
-
+  const {data,error}=await db.from("profiles").select("*").eq("id",currentUser.id).maybeSingle();
   if(error){toast(error.message);return}
   if(data){currentProfile=data;return}
-
-  const name=displayName||
-    currentUser.user_metadata?.display_name||
-    currentUser.email?.split("@")[0]||"Member";
-
+  const name=displayName||currentUser.user_metadata?.display_name||currentUser.email?.split("@")[0]||"Member";
   const username="user_"+currentUser.id.slice(0,8);
-
-  const {data:created,error:createError}=await db.from("profiles")
-    .insert({id:currentUser.id,display_name:name,username,bio:""})
-    .select().single();
-
+  const {data:created,error:createError}=await db.from("profiles").insert({id:currentUser.id,display_name:name,username,bio:""}).select().single();
   if(createError){toast("Profile setup: "+createError.message);return}
   currentProfile=created;
 }
-
 async function enterApp(){
-  el("authView").classList.add("hidden");
-  el("mainView").classList.remove("hidden");
-  el("mobileNav").classList.remove("hidden");
-  el("headerSignOut").classList.remove("hidden");
-  el("headerUser").textContent=currentProfile?.display_name||currentUser.email;
-
-  await loadSavedPostIds();
-  await loadFeed();
-  await loadStories();
-  await loadProfile();
-  await loadNotifications();
-  await loadGroups();
-  await loadPeople();
-  showPage("home");
+  el("authView").classList.add("hidden");el("mainView").classList.remove("hidden");el("mobileNav").classList.remove("hidden");
+  updateHeaderProfile();
+  await loadSavedPostIds();await loadFeed();await loadStories();await loadProfile();
+  await loadNotifications();await loadGroups();await loadPeople();showPage("home");
 }
 
 // ==========================================
 // PAGE NAVIGATION
 // ==========================================
-
 function showPage(page){
   document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));
-  const selected=el(page+"Page");
-  if(selected)selected.classList.remove("hidden");
-
-  document.querySelectorAll("[data-page]").forEach(button=>{
-    button.classList.toggle("active",button.dataset.page===page);
-  });
-
-  if(page==="home")loadFeed();
-  if(page==="reels")loadReels();
-  if(page==="discover")loadPeople();
-  if(page==="groups")loadGroups();
-  if(page==="messages")loadConversations();
-  if(page==="saved")loadSavedPosts();
-  if(page==="notifications")loadNotifications();
-  if(page==="profile")loadProfile();
+  const selected=el(page+"Page");if(selected)selected.classList.remove("hidden");
+  document.querySelectorAll("[data-page]").forEach(button=>button.classList.toggle("active",button.dataset.page===page));
+  if(page==="home")loadFeed();if(page==="reels")loadReels();if(page==="discover")loadPeople();
+  if(page==="groups")loadGroups();if(page==="messages")loadConversations();if(page==="saved")loadSavedPosts();
+  if(page==="notifications")loadNotifications();if(page==="profile")loadProfile();
 }
 
 // ==========================================
 // PROFILE
 // ==========================================
-
 async function loadProfile(){
   if(!currentUser)return;
-
-  const {data,error}=await db.from("profiles")
-    .select("*").eq("id",currentUser.id).maybeSingle();
-
-  if(error)return toast(error.message);
-  if(!data)return;
-
-  currentProfile=data;
+  const {data,error}=await db.from("profiles").select("*").eq("id",currentUser.id).maybeSingle();
+  if(error)return toast(error.message);if(!data)return;
+  currentProfile=data;updateHeaderProfile();
   el("profileDisplayName").textContent=data.display_name||"ConnectUp member";
-  el("profileUsername").textContent=data.username?"@"+data.username:"";
-  el("profileBio").textContent=data.bio||"";
-  el("editDisplayName").value=data.display_name||"";
-  el("editUsername").value=data.username||"";
-  el("editBio").value=data.bio||"";
-
-  el("profileAvatar").innerHTML=data.avatar_url
-    ?`<img src="${escapeHTML(data.avatar_url)}" alt="Profile photo">`
-    :escapeHTML((data.display_name||"C").charAt(0).toUpperCase());
-
-  const {count:posts}=await db.from("posts")
-    .select("*",{count:"exact",head:true}).eq("user_id",currentUser.id);
-  const {count:followers}=await db.from("follows")
-    .select("*",{count:"exact",head:true}).eq("following_id",currentUser.id);
-  const {count:following}=await db.from("follows")
-    .select("*",{count:"exact",head:true}).eq("follower_id",currentUser.id);
-
-  el("postCount").textContent=posts||0;
-  el("followerCount").textContent=followers||0;
-  el("followingCount").textContent=following||0;
+  el("profileUsername").textContent=data.username?"@"+data.username:"";el("profileBio").textContent=data.bio||"";
+  el("editDisplayName").value=data.display_name||"";el("editUsername").value=data.username||"";el("editBio").value=data.bio||"";
+  el("profileAvatar").innerHTML=data.avatar_url?`<img src="${escapeHTML(data.avatar_url)}" alt="Profile photo">`:escapeHTML((data.display_name||"C").charAt(0).toUpperCase());
+  const {count:posts}=await db.from("posts").select("*",{count:"exact",head:true}).eq("user_id",currentUser.id);
+  const {count:followers}=await db.from("follows").select("*",{count:"exact",head:true}).eq("following_id",currentUser.id);
+  const {count:following}=await db.from("follows").select("*",{count:"exact",head:true}).eq("follower_id",currentUser.id);
+  el("postCount").textContent=posts||0;el("followerCount").textContent=followers||0;el("followingCount").textContent=following||0;
   await loadMyPosts();
 }
-
 async function saveProfile(){
   if(!currentUser)return;
-
-  const display_name=el("editDisplayName").value.trim();
-  const username=el("editUsername").value.trim().replace(/^@/,"");
-  const bio=el("editBio").value.trim();
-
+  const display_name=el("editDisplayName").value.trim(),username=el("editUsername").value.trim().replace(/^@/,""),bio=el("editBio").value.trim();
   if(!display_name||!username)return toast("Name and username are required.");
-
-  const updates={display_name,username,bio};
-  const file=el("avatarFile").files[0];
-
+  const updates={display_name,username,bio},file=el("avatarFile").files[0];
   if(file){
     if(file.size>50*1024*1024)return toast("Profile photo must be under 50 MB.");
-    const extension=file.name.split(".").pop();
-    const path=`${currentUser.id}/avatar_${Date.now()}.${extension}`;
-
-    const {error:uploadError}=await db.storage.from("Connectup-media")
-      .upload(path,file,{upsert:true});
+    const extension=file.name.split(".").pop(),path=`${currentUser.id}/avatar_${Date.now()}.${extension}`;
+    const {error:uploadError}=await db.storage.from("Connectup-media").upload(path,file,{upsert:true});
     if(uploadError)return toast(uploadError.message);
-
-    const {data:urlData}=db.storage.from("Connectup-media").getPublicUrl(path);
-    updates.avatar_url=urlData.publicUrl;
+    const {data:urlData}=db.storage.from("Connectup-media").getPublicUrl(path);updates.avatar_url=urlData.publicUrl;
   }
-
-  const {data,error}=await db.from("profiles")
-    .upsert({id:currentUser.id,...updates}).select().single();
-
-  if(error)return toast(error.message);
-  currentProfile=data;
-  toast("Profile updated successfully.");
-  await loadProfile();
+  const {data,error}=await db.from("profiles").upsert({id:currentUser.id,...updates}).select().single();
+  if(error)return toast(error.message);currentProfile=data;toast("Profile updated successfully.");await loadProfile();
 }
 
 // ==========================================
 // POSTS AND MEDIA
 // ==========================================
-
 async function uploadMedia(file){
-  if(!file)return null;
-  if(file.size>50*1024*1024)throw new Error("File must be under 50 MB.");
-
-  const extension=file.name.split(".").pop();
-  const path=`${currentUser.id}/${Date.now()}_${Math.random().toString(36).slice(2)}.${extension}`;
-
-  const {error}=await db.storage.from("Connectup-media").upload(path,file);
-  if(error)throw error;
-
-  const {data}=db.storage.from("Connectup-media").getPublicUrl(path);
-  return data.publicUrl;
+  if(!file)return null;if(file.size>50*1024*1024)throw new Error("File must be under 50 MB.");
+  const extension=file.name.split(".").pop(),path=`${currentUser.id}/${Date.now()}_${Math.random().toString(36).slice(2)}.${extension}`;
+  const {error}=await db.storage.from("Connectup-media").upload(path,file);if(error)throw error;
+  const {data}=db.storage.from("Connectup-media").getPublicUrl(path);return data.publicUrl;
 }
-
 async function createPost(){
-  const content=el("postText").value.trim();
-  const file=el("postMedia").files[0];
+  const content=el("postText").value.trim(),file=el("postMedia").files[0];
   if(!content&&!file)return toast("Write something or select a photo/video.");
-
   try{
-    const media_url=await uploadMedia(file);
-    const media_type=!file?"text":file.type.startsWith("video/")?"video":"image";
-
-    const {error}=await db.from("posts").insert({
-      user_id:currentUser.id,content,media_url,media_type
-    });
-    if(error)throw error;
-
-    el("postText").value="";
-    el("postMedia").value="";
-    toast("Your post has been published!");
-    await loadFeed();
-    await loadProfile();
-  }catch(error){
-    toast(error.message||"Could not publish post.");
-  }
+    const media_url=await uploadMedia(file),media_type=!file?"text":file.type.startsWith("video/")?"video":"image";
+    const {error}=await db.from("posts").insert({user_id:currentUser.id,content,media_url,media_type});if(error)throw error;
+    el("postText").value="";el("postMedia").value="";toast("Your post has been published!");await loadFeed();await loadProfile();
+  }catch(error){toast(error.message||"Could not publish post.")}
 }
-
 function renderPost(post,profile,likes=[],comments=[]){
-  const liked=likes.some(item=>item.user_id===currentUser.id);
-  const saved=savedPostIds.has(post.id);
-  let media="";
-
-  if(post.media_url&&post.media_type==="image"){
-    media=`<img class="post-media" src="${escapeHTML(post.media_url)}" alt="Post image">`;
-  }else if(post.media_url&&post.media_type==="video"){
-    media=`<video class="post-media" src="${escapeHTML(post.media_url)}" controls playsinline></video>`;
-  }
-
+  const liked=likes.some(item=>item.user_id===currentUser.id),saved=savedPostIds.has(post.id);let media="";
+  if(post.media_url&&post.media_type==="image")media=`<img class="post-media" src="${escapeHTML(post.media_url)}" alt="Post image">`;
+  else if(post.media_url&&post.media_type==="video")media=`<video class="post-media" src="${escapeHTML(post.media_url)}" controls playsinline></video>`;
   const author=profile?.display_name||profile?.username||"ConnectUp member";
-
-  return `
-  <article class="card" id="post-${post.id}">
-    <div class="post-head">
-      ${avatarHTML(profile)}
-      <div><div class="post-author">${escapeHTML(author)}</div>
-      <div class="post-time">${escapeHTML(formatDate(post.created_at))}</div></div>
-    </div>
-    <div class="post-content">${escapeHTML(post.content||"")}</div>
-    ${media}
+  return `<article class="card" id="post-${post.id}">
+    <div class="post-head">${avatarHTML(profile)}<div><div class="post-author">${escapeHTML(author)}</div><div class="post-time">${escapeHTML(formatDate(post.created_at))}</div></div></div>
+    <div class="post-content">${escapeHTML(post.content||"")}</div>${media}
     <div class="post-actions">
       <button onclick="toggleLike('${post.id}')">${liked?"♥ Liked":"♡ Like"} (${likes.length})</button>
       <button onclick="toggleComments('${post.id}')">Comment (${comments.length})</button>
@@ -525,700 +388,279 @@ function renderPost(post,profile,likes=[],comments=[]){
       ${post.user_id!==currentUser.id?`<button onclick="followUser('${post.user_id}')">＋ Follow</button>`:""}
       ${post.user_id===currentUser.id?`<button onclick="deletePost('${post.id}')">Delete</button>`:""}
     </div>
-    <div class="comment-list" id="comments-${post.id}">
-      ${comments.map(c=>`
-        <div class="comment-item">
-          <strong>${escapeHTML(c.profiles?.display_name||"Member")}</strong>
-          <div>${escapeHTML(c.content)}</div>
-        </div>`).join("")}
-    </div>
-    <form class="comment-form" onsubmit="addComment(event,'${post.id}')">
-      <input class="message-input" id="comment-input-${post.id}" placeholder="Write a comment..." required>
-      <button class="primary-btn" type="submit">Send</button>
-    </form>
+    <div class="comment-list" id="comments-${post.id}">${comments.map(c=>`<div class="comment-item"><strong>${escapeHTML(c.profiles?.display_name||"Member")}</strong><div>${escapeHTML(c.content)}</div></div>`).join("")}</div>
+    <form class="comment-form" onsubmit="addComment(event,'${post.id}')"><input class="message-input" id="comment-input-${post.id}" placeholder="Write a comment..." required><button class="primary-btn" type="submit">Send</button></form>
   </article>`;
 }
-
 async function loadFeed(){
-  if(!currentUser)return;
-  const container=el("feedList");
-  container.innerHTML=`<div class="card empty-state">Loading posts...</div>`;
-
-  let query=db.from("posts").select("*")
-    .order("created_at",{ascending:false}).limit(50);
-
+  if(!currentUser)return;const container=el("feedList");container.innerHTML=`<div class="card empty-state">Loading posts...</div>`;
+  let query=db.from("posts").select("*").order("created_at",{ascending:false}).limit(50);
   if(currentFeed==="mine")query=query.eq("user_id",currentUser.id);
-
   if(currentFeed==="following"){
-    const {data:follows}=await db.from("follows")
-      .select("following_id").eq("follower_id",currentUser.id);
+    const {data:follows}=await db.from("follows").select("following_id").eq("follower_id",currentUser.id);
     const ids=(follows||[]).map(f=>f.following_id);
-
-    if(!ids.length){
-      container.innerHTML=`<div class="card empty-state"><strong>No posts yet</strong>Follow people to see their posts here.</div>`;
-      return;
-    }
+    if(!ids.length){container.innerHTML=`<div class="card empty-state"><strong>No posts yet</strong>Follow people to see their posts here.</div>`;return}
     query=query.in("user_id",ids);
   }
-
   const {data:posts,error}=await query;
   if(error){container.innerHTML=`<div class="card empty-state">${escapeHTML(error.message)}</div>`;return}
-  if(!posts?.length){
-    container.innerHTML=`<div class="card empty-state"><strong>No posts yet</strong>Be the first to share something!</div>`;
-    return;
-  }
-
-  const userIds=[...new Set(posts.map(p=>p.user_id))];
-  const postIds=posts.map(p=>p.id);
-
+  if(!posts?.length){container.innerHTML=`<div class="card empty-state"><strong>No posts yet</strong>Be the first to share something!</div>`;return}
+  const userIds=[...new Set(posts.map(p=>p.user_id))],postIds=posts.map(p=>p.id);
   const [{data:profiles},{data:likes},{data:comments}]=await Promise.all([
-    db.from("profiles").select("*").in("id",userIds),
-    db.from("likes").select("*").in("post_id",postIds),
-    db.from("comments").select("*, profiles(display_name)")
-      .in("post_id",postIds).order("created_at")
+    db.from("profiles").select("*").in("id",userIds),db.from("likes").select("*").in("post_id",postIds),
+    db.from("comments").select("*, profiles(display_name)").in("post_id",postIds).order("created_at")
   ]);
-
-  container.innerHTML=posts.map(post=>renderPost(
-    post,
-    profiles?.find(p=>p.id===post.user_id),
-    (likes||[]).filter(l=>l.post_id===post.id),
-    (comments||[]).filter(c=>c.post_id===post.id)
-  )).join("");
+  container.innerHTML=posts.map(post=>renderPost(post,profiles?.find(p=>p.id===post.user_id),(likes||[]).filter(l=>l.post_id===post.id),(comments||[]).filter(c=>c.post_id===post.id))).join("");
 }
-
 function setFeed(type){currentFeed=type;loadFeed()}
-
 async function loadMyPosts(){
-  if(!currentUser)return;
-  const {data,error}=await db.from("posts").select("*")
-    .eq("user_id",currentUser.id).order("created_at",{ascending:false});
-  if(error)return;
-
-  el("myPostsList").innerHTML=(data||[]).length
-    ?data.map(p=>renderPost(p,currentProfile)).join("")
-    :`<div class="card empty-state">You haven't posted anything yet.</div>`;
+  if(!currentUser)return;const {data,error}=await db.from("posts").select("*").eq("user_id",currentUser.id).order("created_at",{ascending:false});if(error)return;
+  el("myPostsList").innerHTML=(data||[]).length?data.map(p=>renderPost(p,currentProfile)).join(""):`<div class="card empty-state">You haven't posted anything yet.</div>`;
 }
-
 async function toggleLike(postId){
-  const {data:existing}=await db.from("likes").select("*")
-    .eq("post_id",postId).eq("user_id",currentUser.id).maybeSingle();
-
-  if(existing){
-    const {error}=await db.from("likes").delete()
-      .eq("post_id",postId).eq("user_id",currentUser.id);
-    if(error)return toast(error.message);
-  }else{
-    const {error}=await db.from("likes").insert({post_id:postId,user_id:currentUser.id});
-    if(error)return toast(error.message);
-
+  const {data:existing}=await db.from("likes").select("*").eq("post_id",postId).eq("user_id",currentUser.id).maybeSingle();
+  if(existing){const {error}=await db.from("likes").delete().eq("post_id",postId).eq("user_id",currentUser.id);if(error)return toast(error.message)}
+  else{
+    const {error}=await db.from("likes").insert({post_id:postId,user_id:currentUser.id});if(error)return toast(error.message);
     const {data:post}=await db.from("posts").select("user_id").eq("id",postId).maybeSingle();
     if(post&&post.user_id!==currentUser.id)await createNotification(post.user_id,"like",postId);
-  }
-  await loadFeed();
+  }await loadFeed();
 }
-
 async function addComment(event,postId){
-  event.preventDefault();
-  const input=el("comment-input-"+postId);
-  const content=input.value.trim();
-  if(!content)return;
-
-  const {error}=await db.from("comments").insert({
-    post_id:postId,user_id:currentUser.id,content
-  });
-  if(error)return toast(error.message);
-
+  event.preventDefault();const input=el("comment-input-"+postId),content=input.value.trim();if(!content)return;
+  const {error}=await db.from("comments").insert({post_id:postId,user_id:currentUser.id,content});if(error)return toast(error.message);
   const {data:post}=await db.from("posts").select("user_id").eq("id",postId).maybeSingle();
   if(post&&post.user_id!==currentUser.id)await createNotification(post.user_id,"comment",postId);
-
-  input.value="";
-  await loadFeed();
+  input.value="";await loadFeed();
 }
-
-function toggleComments(postId){
-  const box=el("comments-"+postId);
-  if(box)box.scrollIntoView({behavior:"smooth",block:"center"});
-}
-
+function toggleComments(postId){const box=el("comments-"+postId);if(box)box.scrollIntoView({behavior:"smooth",block:"center"})}
 async function deletePost(postId){
-  if(!confirm("Delete this post?"))return;
-  const {error}=await db.from("posts").delete()
-    .eq("id",postId).eq("user_id",currentUser.id);
-  if(error)return toast(error.message);
-  toast("Post deleted.");
-  await loadFeed();
-  await loadProfile();
+  if(!confirm("Delete this post?"))return;const {error}=await db.from("posts").delete().eq("id",postId).eq("user_id",currentUser.id);
+  if(error)return toast(error.message);toast("Post deleted.");await loadFeed();await loadProfile();
 }
 
 // ==========================================
 // FOLLOW AND DISCOVER
 // ==========================================
-
 async function followUser(userId){
   if(userId===currentUser.id)return;
-
-  const {data:existing}=await db.from("follows").select("*")
-    .eq("follower_id",currentUser.id).eq("following_id",userId).maybeSingle();
+  const {data:existing}=await db.from("follows").select("*").eq("follower_id",currentUser.id).eq("following_id",userId).maybeSingle();
   if(existing)return toast("You are already following this person.");
-
-  const {error}=await db.from("follows").insert({
-    follower_id:currentUser.id,following_id:userId
-  });
-  if(error)return toast(error.message);
-
-  await createNotification(userId,"follow",null);
-  toast("You are now following this person.");
-  await loadPeople();
+  const {error}=await db.from("follows").insert({follower_id:currentUser.id,following_id:userId});if(error)return toast(error.message);
+  await createNotification(userId,"follow",null);toast("You are now following this person.");await loadPeople();
 }
-
 async function loadPeople(){
-  if(!currentUser)return;
-  const {data,error}=await db.from("profiles").select("*")
-    .neq("id",currentUser.id).order("created_at",{ascending:false}).limit(50);
-  if(error)return toast(error.message);
-  renderPeople(data||[]);
+  if(!currentUser)return;const {data,error}=await db.from("profiles").select("*").neq("id",currentUser.id).order("created_at",{ascending:false}).limit(50);
+  if(error)return toast(error.message);renderPeople(data||[]);
 }
-
 function renderPeople(people){
-  const container=el("peopleList");
-  if(!people.length){container.innerHTML=`<div class="empty-state">No members found.</div>`;return}
-
-  container.innerHTML=people.map(person=>`
-    <div class="card person-card">
-      ${avatarHTML(person)}
-      <strong>${escapeHTML(person.display_name||"Member")}</strong>
-      <p class="small muted">@${escapeHTML(person.username||"")}</p>
-      <p class="small">${escapeHTML(person.bio||"")}</p>
-      <button class="primary-btn" onclick="followUser('${person.id}')">Follow</button>
-      <button class="secondary-btn" onclick="openDirectChat('${person.id}','${escapeHTML(person.display_name||"Member")}')">Message</button>
-    </div>`).join("");
+  const container=el("peopleList");if(!people.length){container.innerHTML=`<div class="empty-state">No members found.</div>`;return}
+  container.innerHTML=people.map(person=>`<div class="card person-card">${avatarHTML(person)}<strong>${escapeHTML(person.display_name||"Member")}</strong><p class="small muted">@${escapeHTML(person.username||"")}</p><p class="small">${escapeHTML(person.bio||"")}</p><button class="primary-btn" onclick="followUser('${person.id}')">Follow</button><button class="secondary-btn" onclick="openDirectChat('${person.id}','${escapeHTML(person.display_name||"Member")}')">Message</button></div>`).join("");
 }
-
 async function searchPeople(){
-  const term=el("peopleSearch").value.trim().toLowerCase();
-  if(!term)return loadPeople();
-
-  const {data,error}=await db.from("profiles").select("*")
-    .neq("id",currentUser.id)
-    .or(`display_name.ilike.%${term}%,username.ilike.%${term}%`).limit(50);
-  if(error)return toast(error.message);
-  renderPeople(data||[]);
+  const term=el("peopleSearch").value.trim().toLowerCase();if(!term)return loadPeople();
+  const {data,error}=await db.from("profiles").select("*").neq("id",currentUser.id).or(`display_name.ilike.%${term}%,username.ilike.%${term}%`).limit(50);
+  if(error)return toast(error.message);renderPeople(data||[]);
 }
 
 // ==========================================
 // SAVED POSTS
 // ==========================================
-
 async function loadSavedPostIds(){
-  if(!currentUser)return;
-  const {data,error}=await db.from("saved_posts").select("post_id")
-    .eq("user_id",currentUser.id);
-
-  if(error){savedPostIds=new Set();return}
-  savedPostIds=new Set((data||[]).map(row=>row.post_id));
+  if(!currentUser)return;const {data,error}=await db.from("saved_posts").select("post_id").eq("user_id",currentUser.id);
+  if(error){savedPostIds=new Set();return}savedPostIds=new Set((data||[]).map(row=>row.post_id));
 }
-
 async function toggleSaved(postId){
   if(savedPostIds.has(postId)){
-    const {error}=await db.from("saved_posts").delete()
-      .eq("user_id",currentUser.id).eq("post_id",postId);
-    if(error)return toast(error.message);
-    savedPostIds.delete(postId);
-    toast("Post removed from saved posts.");
+    const {error}=await db.from("saved_posts").delete().eq("user_id",currentUser.id).eq("post_id",postId);if(error)return toast(error.message);
+    savedPostIds.delete(postId);toast("Post removed from saved posts.");
   }else{
-    const {error}=await db.from("saved_posts").insert({
-      user_id:currentUser.id,post_id:postId
-    });
-    if(error)return toast(error.message);
-    savedPostIds.add(postId);
-    toast("Post saved.");
+    const {error}=await db.from("saved_posts").insert({user_id:currentUser.id,post_id:postId});if(error)return toast(error.message);
+    savedPostIds.add(postId);toast("Post saved.");
   }
-
-  await loadFeed();
-  if(!el("savedPage").classList.contains("hidden"))await loadSavedPosts();
+  await loadFeed();if(!el("savedPage").classList.contains("hidden"))await loadSavedPosts();
 }
-
 async function loadSavedPosts(){
-  if(!currentUser)return;
-  const container=el("savedList");
-
-  const {data:saved,error}=await db.from("saved_posts")
-    .select("post_id").eq("user_id",currentUser.id);
+  if(!currentUser)return;const container=el("savedList");
+  const {data:saved,error}=await db.from("saved_posts").select("post_id").eq("user_id",currentUser.id);
   if(error){container.innerHTML=`<div class="card">${escapeHTML(error.message)}</div>`;return}
-
   const ids=(saved||[]).map(row=>row.post_id);
-  if(!ids.length){
-    container.innerHTML=`<div class="card empty-state"><strong>No saved posts</strong>Posts you save will appear here.</div>`;
-    return;
-  }
-
-  const {data:posts,error:postError}=await db.from("posts")
-    .select("*").in("id",ids).order("created_at",{ascending:false});
+  if(!ids.length){container.innerHTML=`<div class="card empty-state"><strong>No saved posts</strong>Posts you save will appear here.</div>`;return}
+  const {data:posts,error:postError}=await db.from("posts").select("*").in("id",ids).order("created_at",{ascending:false});
   if(postError)return toast(postError.message);
-
-  const userIds=[...new Set((posts||[]).map(p=>p.user_id))];
-  const postIds=(posts||[]).map(p=>p.id);
-
+  const userIds=[...new Set((posts||[]).map(p=>p.user_id))],postIds=(posts||[]).map(p=>p.id);
   const [{data:profiles},{data:likes},{data:comments}]=await Promise.all([
-    db.from("profiles").select("*").in("id",userIds),
-    db.from("likes").select("*").in("post_id",postIds),
+    db.from("profiles").select("*").in("id",userIds),db.from("likes").select("*").in("post_id",postIds),
     db.from("comments").select("*, profiles(display_name)").in("post_id",postIds)
   ]);
-
-  container.innerHTML=(posts||[]).map(post=>renderPost(
-    post,
-    profiles?.find(p=>p.id===post.user_id),
-    (likes||[]).filter(l=>l.post_id===post.id),
-    (comments||[]).filter(c=>c.post_id===post.id)
-  )).join("");
+  container.innerHTML=(posts||[]).map(post=>renderPost(post,profiles?.find(p=>p.id===post.user_id),(likes||[]).filter(l=>l.post_id===post.id),(comments||[]).filter(c=>c.post_id===post.id))).join("");
 }
 
 // ==========================================
 // NOTIFICATIONS
 // ==========================================
-
 async function createNotification(userId,type,postId){
   if(!userId||userId===currentUser.id)return;
-
-  const messages={
-    like:"liked your post",
-    comment:"commented on your post",
-    follow:"started following you"
-  };
-
-  const {error}=await db.from("notifications").insert({
-    user_id:userId,
-    actor_id:currentUser.id,
-    type,
-    message:messages[type]||"interacted with you",
-    post_id:postId
-  });
-
+  const messages={like:"liked your post",comment:"commented on your post",follow:"started following you"};
+  const {error}=await db.from("notifications").insert({user_id:userId,actor_id:currentUser.id,type,message:messages[type]||"interacted with you",post_id:postId});
   if(error)console.error("Notification error:",error.message);
 }
-
 async function loadNotifications(){
-  if(!currentUser)return;
-  const container=el("notificationsList");
-
-  const {data,error}=await db.from("notifications").select("*")
-    .eq("user_id",currentUser.id).order("created_at",{ascending:false}).limit(50);
-
+  if(!currentUser)return;const container=el("notificationsList");
+  const {data,error}=await db.from("notifications").select("*").eq("user_id",currentUser.id).order("created_at",{ascending:false}).limit(50);
   if(error){container.innerHTML=escapeHTML(error.message);return}
   if(!data?.length){container.innerHTML=`<div class="empty-state">No notifications yet.</div>`;return}
-
-  container.innerHTML=data.map(item=>`
-    <div class="notification-item">
-      <strong>${escapeHTML(item.message||"You have a notification")}</strong>
-      <div class="small muted">${escapeHTML(formatDate(item.created_at))}</div>
-    </div>`).join("");
-
-  await db.from("notifications").update({is_read:true})
-    .eq("user_id",currentUser.id).eq("is_read",false);
+  container.innerHTML=data.map(item=>`<div class="notification-item"><strong>${escapeHTML(item.message||"You have a notification")}</strong><div class="small muted">${escapeHTML(formatDate(item.created_at))}</div></div>`).join("");
+  await db.from("notifications").update({is_read:true}).eq("user_id",currentUser.id).eq("is_read",false);
 }
 
 // ==========================================
-// GROUPS — UPDATED
+// GROUPS
 // ==========================================
-
 async function createGroup(){
   if(!currentUser)return toast("Please sign in first.");
-
-  const name=el("groupName").value.trim();
-  const description=el("groupDescription").value.trim();
-
-  if(!name)return toast("Enter a group name.");
-
-  const {data:group,error}=await db.from("groups").insert({
-    name,
-    description,
-    owner_id:currentUser.id
-  }).select().single();
-
-  if(error)return toast(error.message);
-
-  const {error:memberError}=await db.from("group_members").insert({
-    group_id:group.id,
-    user_id:currentUser.id
-  });
-
-  if(memberError && memberError.code!=="23505"){
-    toast("Group created, but joining failed: "+memberError.message);
-  }else{
-    toast("Group created successfully.");
-  }
-
-  el("groupName").value="";
-  el("groupDescription").value="";
-  await loadGroups();
+  const name=el("groupName").value.trim(),description=el("groupDescription").value.trim();if(!name)return toast("Enter a group name.");
+  const {data:group,error}=await db.from("groups").insert({name,description,owner_id:currentUser.id}).select().single();if(error)return toast(error.message);
+  const {error:memberError}=await db.from("group_members").insert({group_id:group.id,user_id:currentUser.id});
+  if(memberError&&memberError.code!=="23505")toast("Group created, but joining failed: "+memberError.message);else toast("Group created successfully.");
+  el("groupName").value="";el("groupDescription").value="";await loadGroups();
 }
-
 async function loadGroups(){
-  if(!currentUser)return;
-
-  const {data:groups,error}=await db.from("groups")
-    .select("*")
-    .order("created_at",{ascending:false});
-
-  if(error)return toast(error.message);
-
-  const {data:memberships,error:memberError}=await db
-    .from("group_members")
-    .select("group_id")
-    .eq("user_id",currentUser.id);
-
-  if(memberError)return toast(memberError.message);
-
-  const joinedGroups=new Set(
-    (memberships||[]).map(member=>member.group_id)
-  );
-
-  const container=el("groupsList");
-
-  if(!groups?.length){
-    container.innerHTML=`<div class="card empty-state">No groups yet. Create the first one!</div>`;
-    return;
-  }
-
+  if(!currentUser)return;const {data:groups,error}=await db.from("groups").select("*").order("created_at",{ascending:false});if(error)return toast(error.message);
+  const {data:memberships,error:memberError}=await db.from("group_members").select("group_id").eq("user_id",currentUser.id);if(memberError)return toast(memberError.message);
+  const joinedGroups=new Set((memberships||[]).map(member=>member.group_id)),container=el("groupsList");
+  if(!groups?.length){container.innerHTML=`<div class="card empty-state">No groups yet. Create the first one!</div>`;return}
   container.innerHTML=groups.map(group=>{
     const joined=joinedGroups.has(group.id);
-
-    return `
-      <div class="card">
-        <h3>${escapeHTML(group.name)}</h3>
-        <p class="muted">${escapeHTML(group.description||"")}</p>
-
-        ${
-          joined
-          ? `<button class="primary-btn" disabled>Joined ✓</button>`
-          : `<button class="primary-btn" onclick="joinGroup('${group.id}')">Join group</button>`
-        }
-
-        <button class="secondary-btn"
-          onclick="openGroupChat('${group.id}','${escapeHTML(group.name)}')">
-          Group chat
-        </button>
-      </div>
-    `;
+    return `<div class="card"><h3>${escapeHTML(group.name)}</h3><p class="muted">${escapeHTML(group.description||"")}</p>${joined?`<button class="primary-btn" disabled>Joined ✓</button>`:`<button class="primary-btn" onclick="joinGroup('${group.id}')">Join group</button>`}<button class="secondary-btn" onclick="openGroupChat('${group.id}','${escapeHTML(group.name)}')">Group chat</button></div>`;
   }).join("");
 }
-
 async function joinGroup(groupId){
   if(!currentUser)return toast("Please sign in first.");
-
-  const {error}=await db.from("group_members").insert({
-    group_id:groupId,
-    user_id:currentUser.id
-  });
-
-  if(error && error.code!=="23505"){
-    return toast(error.message);
-  }
-
-  toast(error ? "You are already in this group." : "You joined the group!");
-
-  await loadGroups();
+  const {error}=await db.from("group_members").insert({group_id:groupId,user_id:currentUser.id});
+  if(error&&error.code!=="23505")return toast(error.message);
+  toast(error?"You are already in this group.":"You joined the group!");await loadGroups();
 }
 
 // ==========================================
 // GROUP CHAT
 // ==========================================
-
 async function openGroupChat(groupId,groupName){
-  showPage("messages");
-
-  activeGroupChat=groupId;
-  activeGroupName=groupName||"Group";
-  activeChatUser=null;
-
+  showPage("messages");activeGroupChat=groupId;activeGroupName=groupName||"Group";activeChatUser=null;
   el("chatHeading").innerHTML=`<strong>${escapeHTML(activeGroupName)} — Group chat</strong>`;
-  el("messagesList").classList.add("hidden");
-  el("chatMessages").classList.remove("hidden");
-  el("chatComposer").classList.remove("hidden");
-
-  const {data,error}=await db.from("group_messages").select("*")
-    .eq("group_id",groupId).order("created_at",{ascending:true}).limit(100);
-
+  el("messagesList").classList.add("hidden");el("chatMessages").classList.remove("hidden");el("chatComposer").classList.remove("hidden");
+  const {data,error}=await db.from("group_messages").select("*").eq("group_id",groupId).order("created_at",{ascending:true}).limit(100);
   if(error){toast(error.message);return}
-
-  el("chatMessages").innerHTML=(data||[]).map(message=>`
-    <div class="chat-bubble ${message.sender_id===currentUser.id?"mine":""}">
-      ${escapeHTML(message.content)}
-      <div class="small muted">${escapeHTML(formatDate(message.created_at))}</div>
-    </div>`).join("");
-
+  el("chatMessages").innerHTML=(data||[]).map(message=>`<div class="chat-bubble ${message.sender_id===currentUser.id?"mine":""}">${escapeHTML(message.content)}<div class="small muted">${escapeHTML(formatDate(message.created_at))}</div></div>`).join("");
   el("chatMessages").scrollTop=el("chatMessages").scrollHeight;
 }
-
 async function sendGroupMessage(){
-  if(!activeGroupChat)return;
-  const input=el("messageText");
-  const content=input.value.trim();
-  if(!content)return;
-
-  const {error}=await db.from("group_messages").insert({
-    group_id:activeGroupChat,
-    sender_id:currentUser.id,
-    content
-  });
-
-  if(error)return toast(error.message);
-
-  input.value="";
-  await openGroupChat(activeGroupChat,activeGroupName);
+  if(!activeGroupChat)return;const input=el("messageText"),content=input.value.trim();if(!content)return;
+  const {error}=await db.from("group_messages").insert({group_id:activeGroupChat,sender_id:currentUser.id,content});if(error)return toast(error.message);
+  input.value="";await openGroupChat(activeGroupChat,activeGroupName);
 }
 
 // ==========================================
 // DIRECT MESSAGES
 // ==========================================
-
 async function openDirectChat(userId,name){
-  showPage("messages");
-
-  activeChatUser=userId;
-  activeGroupChat=null;
-  activeGroupName="Group";
-
+  showPage("messages");activeChatUser=userId;activeGroupChat=null;activeGroupName="Group";
   el("chatHeading").innerHTML=`<strong>Chat with ${escapeHTML(name)}</strong>`;
-  el("messagesList").classList.add("hidden");
-  el("chatMessages").classList.remove("hidden");
-  el("chatComposer").classList.remove("hidden");
-
+  el("messagesList").classList.add("hidden");el("chatMessages").classList.remove("hidden");el("chatComposer").classList.remove("hidden");
   await loadDirectMessages();
 }
-
 async function loadDirectMessages(){
-  if(!activeChatUser)return;
-
-  const chatUser=activeChatUser;
-  const {data,error}=await db.from("direct_messages").select("*")
-    .or(`and(sender_id.eq.${currentUser.id},recipient_id.eq.${chatUser}),and(sender_id.eq.${chatUser},recipient_id.eq.${currentUser.id})`)
-    .order("created_at",{ascending:true}).limit(100);
-
-  if(error)return toast(error.message);
-  if(activeChatUser!==chatUser)return;
-
-  el("chatMessages").innerHTML=(data||[]).map(message=>`
-    <div class="chat-bubble ${message.sender_id===currentUser.id?"mine":""}">
-      ${escapeHTML(message.content)}
-      <div class="small muted">${escapeHTML(formatDate(message.created_at))}</div>
-    </div>`).join("");
-
+  if(!activeChatUser)return;const chatUser=activeChatUser;
+  const {data,error}=await db.from("direct_messages").select("*").or(`and(sender_id.eq.${currentUser.id},recipient_id.eq.${chatUser}),and(sender_id.eq.${chatUser},recipient_id.eq.${currentUser.id})`).order("created_at",{ascending:true}).limit(100);
+  if(error)return toast(error.message);if(activeChatUser!==chatUser)return;
+  el("chatMessages").innerHTML=(data||[]).map(message=>`<div class="chat-bubble ${message.sender_id===currentUser.id?"mine":""}">${escapeHTML(message.content)}<div class="small muted">${escapeHTML(formatDate(message.created_at))}</div></div>`).join("");
   el("chatMessages").scrollTop=el("chatMessages").scrollHeight;
-
-  await db.from("direct_messages").update({is_read:true})
-    .eq("sender_id",chatUser).eq("recipient_id",currentUser.id);
+  await db.from("direct_messages").update({is_read:true}).eq("sender_id",chatUser).eq("recipient_id",currentUser.id);
 }
-
 async function sendDirectMessage(){
-  const content=el("messageText").value.trim();
-  if(!content)return;
-  if(activeGroupChat)return sendGroupMessage();
-  if(!activeChatUser)return toast("Choose a conversation first.");
-
-  const {error}=await db.from("direct_messages").insert({
-    sender_id:currentUser.id,
-    recipient_id:activeChatUser,
-    content
-  });
-
-  if(error)return toast(error.message);
-
-  el("messageText").value="";
-  await loadDirectMessages();
+  const content=el("messageText").value.trim();if(!content)return;
+  if(activeGroupChat)return sendGroupMessage();if(!activeChatUser)return toast("Choose a conversation first.");
+  const {error}=await db.from("direct_messages").insert({sender_id:currentUser.id,recipient_id:activeChatUser,content});if(error)return toast(error.message);
+  el("messageText").value="";await loadDirectMessages();
 }
-
 async function loadConversations(){
-  if(!currentUser)return;
-
-  activeChatUser=null;
-  activeGroupChat=null;
-  activeGroupName="Group";
-
-  el("chatHeading").innerHTML="<strong>Your conversations</strong>";
-  el("chatMessages").classList.add("hidden");
-  el("chatComposer").classList.add("hidden");
-  el("messagesList").classList.remove("hidden");
-
-  const {data,error}=await db.from("direct_messages").select("*")
-    .or(`sender_id.eq.${currentUser.id},recipient_id.eq.${currentUser.id}`)
-    .order("created_at",{ascending:false}).limit(100);
-
+  if(!currentUser)return;activeChatUser=null;activeGroupChat=null;activeGroupName="Group";
+  el("chatHeading").innerHTML="<strong>Your conversations</strong>";el("chatMessages").classList.add("hidden");
+  el("chatComposer").classList.add("hidden");el("messagesList").classList.remove("hidden");
+  const {data,error}=await db.from("direct_messages").select("*").or(`sender_id.eq.${currentUser.id},recipient_id.eq.${currentUser.id}`).order("created_at",{ascending:false}).limit(100);
   if(error){el("messagesList").innerHTML=escapeHTML(error.message);return}
-
-  const otherIds=[...new Set((data||[]).map(message=>
-    message.sender_id===currentUser.id?message.recipient_id:message.sender_id
-  ))];
-
-  if(!otherIds.length){
-    el("messagesList").innerHTML=`<div class="empty-state">No messages yet. Find someone in Discover and send a message.</div>`;
-    return;
-  }
-
+  const otherIds=[...new Set((data||[]).map(message=>message.sender_id===currentUser.id?message.recipient_id:message.sender_id))];
+  if(!otherIds.length){el("messagesList").innerHTML=`<div class="empty-state">No messages yet. Find someone in Discover and send a message.</div>`;return}
   const {data:profiles}=await db.from("profiles").select("*").in("id",otherIds);
-
   el("messagesList").innerHTML=otherIds.map(id=>{
-    const person=profiles?.find(p=>p.id===id);
-    const name=person?.display_name||person?.username||"Member";
-    return `
-      <div class="message-row">
-        <strong>${escapeHTML(name)}</strong>
-        <button class="secondary-btn" onclick="openDirectChat('${id}','${escapeHTML(name)}')">Open chat</button>
-      </div>`;
+    const person=profiles?.find(p=>p.id===id),name=person?.display_name||person?.username||"Member";
+    return `<div class="message-row"><strong>${escapeHTML(name)}</strong><button class="secondary-btn" onclick="openDirectChat('${id}','${escapeHTML(name)}')">Open chat</button></div>`;
   }).join("");
 }
 
 // ==========================================
 // STORIES
 // ==========================================
-
 function openStoryCreator(){
-  const caption=prompt("Write a caption for your story (optional):");
-  if(caption===null)return;
-
-  const input=document.createElement("input");
-  input.type="file";
-  input.accept="image/*,video/mp4,video/webm";
-
+  const caption=prompt("Write a caption for your story (optional):");if(caption===null)return;
+  const input=document.createElement("input");input.type="file";input.accept="image/*,video/mp4,video/webm";
   input.onchange=async()=>{
-    const file=input.files[0];
-    if(!file)return;
-
+    const file=input.files[0];if(!file)return;
     try{
-      const mediaUrl=await uploadMedia(file);
-      const mediaType=file.type.startsWith("video/")?"video":"image";
+      const mediaUrl=await uploadMedia(file),mediaType=file.type.startsWith("video/")?"video":"image";
       const expires=new Date(Date.now()+24*60*60*1000).toISOString();
-
-      const {error}=await db.from("stories").insert({
-        user_id:currentUser.id,
-        caption:caption.trim(),
-        media_url:mediaUrl,
-        media_type:mediaType,
-        expires_at:expires
-      });
-
-      if(error)return toast(error.message);
-      toast("Story shared.");
-      await loadStories();
-    }catch(error){
-      toast(error.message);
-    }
-  };
-
-  input.click();
+      const {error}=await db.from("stories").insert({user_id:currentUser.id,caption:caption.trim(),media_url:mediaUrl,media_type:mediaType,expires_at:expires});
+      if(error)return toast(error.message);toast("Story shared.");await loadStories();
+    }catch(error){toast(error.message)}
+  };input.click();
 }
-
 async function loadStories(){
   if(!currentUser)return;
-
-  const {data,error}=await db.from("stories")
-    .select("*, profiles(display_name,username,avatar_url)")
-    .gt("expires_at",new Date().toISOString())
-    .order("created_at",{ascending:false}).limit(50);
-
+  const {data,error}=await db.from("stories").select("*, profiles(display_name,username,avatar_url)").gt("expires_at",new Date().toISOString()).order("created_at",{ascending:false}).limit(50);
   if(error){el("storiesList").innerHTML=`<span class="small muted">Stories unavailable.</span>`;return}
-  if(!data?.length){
-    el("storiesList").innerHTML=`<span class="small muted">No stories yet. Add the first one!</span>`;
-    return;
-  }
-
+  if(!data?.length){el("storiesList").innerHTML=`<span class="small muted">No stories yet. Add the first one!</span>`;return}
   el("storiesList").innerHTML=data.map(story=>{
     const name=story.profiles?.display_name||story.profiles?.username||"Member";
-    return `
-      <div class="story-item" onclick="viewStory('${story.id}')">
-        <div class="story-ring">${avatarHTML(story.profiles)}</div>
-        <small>${escapeHTML(name)}</small>
-      </div>`;
+    return `<div class="story-item" onclick="viewStory('${story.id}')"><div class="story-ring">${avatarHTML(story.profiles)}</div><small>${escapeHTML(name)}</small></div>`;
   }).join("");
 }
-
 async function viewStory(storyId){
-  const {data:story,error}=await db.from("stories")
-    .select("*, profiles(display_name,username)")
-    .eq("id",storyId).single();
-
-  if(error)return toast(error.message);
-
+  const {data:story,error}=await db.from("stories").select("*, profiles(display_name,username)").eq("id",storyId).single();if(error)return toast(error.message);
   if(story.user_id!==currentUser.id){
-    const {error:viewError}=await db.from("story_views").upsert({
-      story_id:storyId,viewer_id:currentUser.id
-    },{onConflict:"story_id,viewer_id"});
+    const {error:viewError}=await db.from("story_views").upsert({story_id:storyId,viewer_id:currentUser.id},{onConflict:"story_id,viewer_id"});
     if(viewError)console.error("Story view error:",viewError.message);
   }
-
-  const media=story.media_type==="video"
-    ?`<video src="${escapeHTML(story.media_url)}" controls autoplay class="reel-video"></video>`
-    :`<img src="${escapeHTML(story.media_url)}" class="post-media" alt="Story">`;
-
-  const name=story.profiles?.display_name||"Member";
-  const overlay=document.createElement("div");
+  const media=story.media_type==="video"?`<video src="${escapeHTML(story.media_url)}" controls autoplay class="reel-video"></video>`:`<img src="${escapeHTML(story.media_url)}" class="post-media" alt="Story">`;
+  const name=story.profiles?.display_name||"Member",overlay=document.createElement("div");
   overlay.style.cssText="position:fixed;inset:0;background:#000e;z-index:200;display:flex;align-items:center;justify-content:center;padding:18px;";
-
-  overlay.innerHTML=`
-    <div style="background:white;border-radius:15px;padding:15px;max-width:500px;width:100%;max-height:90vh;overflow:auto">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <strong>${escapeHTML(name)}</strong>
-        <button class="secondary-btn" id="closeStory">Close</button>
-      </div>
-      ${media}<p>${escapeHTML(story.caption||"")}</p>
-    </div>`;
-
-  document.body.appendChild(overlay);
-  overlay.querySelector("#closeStory").onclick=()=>overlay.remove();
+  overlay.innerHTML=`<div style="background:white;border-radius:14px;padding:14px;max-width:500px;width:100%;max-height:90vh;overflow:auto"><div style="display:flex;justify-content:space-between;align-items:center"><strong>${escapeHTML(name)}</strong><button class="secondary-btn" id="closeStory">Close</button></div>${media}<p>${escapeHTML(story.caption||"")}</p></div>`;
+  document.body.appendChild(overlay);overlay.querySelector("#closeStory").onclick=()=>overlay.remove();
 }
 
 // ==========================================
 // REELS
 // ==========================================
-
 async function loadReels(){
-  if(!currentUser)return;
-  const container=el("reelsList");
-
-  const {data,error}=await db.from("posts")
-    .select("*, profiles(display_name,username,avatar_url)")
-    .eq("media_type","video")
-    .order("created_at",{ascending:false}).limit(30);
-
+  if(!currentUser)return;const container=el("reelsList");
+  const {data,error}=await db.from("posts").select("*, profiles(display_name,username,avatar_url)").eq("media_type","video").order("created_at",{ascending:false}).limit(30);
   if(error){container.innerHTML=`<div class="card">${escapeHTML(error.message)}</div>`;return}
-  if(!data?.length){
-    container.innerHTML=`<div class="card empty-state">No videos yet. Share a video to start the Reels feed.</div>`;
-    return;
-  }
-
-  container.innerHTML=data.map(post=>`
-    <div class="card">
-      <strong>${escapeHTML(post.profiles?.display_name||"Member")}</strong>
-      <video class="reel-video" src="${escapeHTML(post.media_url)}" controls playsinline></video>
-      <p>${escapeHTML(post.content||"")}</p>
-    </div>`).join("");
+  if(!data?.length){container.innerHTML=`<div class="card empty-state">No videos yet. Share a video to start the Reels feed.</div>`;return}
+  container.innerHTML=data.map(post=>`<div class="card"><strong>${escapeHTML(post.profiles?.display_name||"Member")}</strong><video class="reel-video" src="${escapeHTML(post.media_url)}" controls playsinline></video><p>${escapeHTML(post.content||"")}</p></div>`).join("");
 }
 
 // ==========================================
 // STARTUP
 // ==========================================
-
 async function startConnectUp(){
-  const {data,error}=await db.auth.getSession();
-  if(error){toast(error.message);return}
-
-  if(data.session?.user){
-    currentUser=data.session.user;
-    await loadOrCreateProfile();
-    await enterApp();
-  }
+  const {data,error}=await db.auth.getSession();if(error){toast(error.message);return}
+  if(data.session?.user){currentUser=data.session.user;await loadOrCreateProfile();await enterApp()}
 }
-
 db.auth.onAuthStateChange((event,session)=>{
   if(event==="SIGNED_OUT"){
-    currentUser=null;
-    currentProfile=null;
-    activeChatUser=null;
-    activeGroupChat=null;
+    currentUser=null;currentProfile=null;activeChatUser=null;activeGroupChat=null;
   }
 });
-
 startConnectUp();
 </script>
 </body>
-</html>
+  </html>
